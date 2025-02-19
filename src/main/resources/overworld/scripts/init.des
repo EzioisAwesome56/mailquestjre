@@ -1,0 +1,4 @@
+# load inside of player's house, spawn point 0
+LOAD_MAP player_house_in 1
+# switch game states
+SET_STATE 0

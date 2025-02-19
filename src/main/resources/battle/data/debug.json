@@ -1,0 +1,9 @@
+{
+	"hp": 15,
+	"magic": 17,
+	"atk": 7,
+	"def": 3,
+	"name": "Debugger",
+	"graphic": "blobcat",
+	"missrate": 1
+}

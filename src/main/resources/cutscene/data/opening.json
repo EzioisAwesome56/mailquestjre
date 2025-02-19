@@ -1,0 +1,24 @@
+{
+	"subdir": ".",
+	"frames": [
+		{
+			"textbox_text": "Hi there! Welcome to the game!",
+			"show_nameplate": false,
+			"name": null,
+			"frame_img": "test-01"
+		},
+		{
+			"textbox_text": "This is a stand in for the opening cutscene, which currently does not exist!",
+			"show_nameplate": false,
+			"name": null,
+			"frame_img": "reuse"
+		},
+		{
+			"textbox_text": "TODO: draw it",
+			"show_nameplate": false,
+			"name": "oofers",
+			"frame_img": "reuse"
+		}
+	],
+	"script": "init"
+}

@@ -1,0 +1,7 @@
+# check to make sure the postman is defeated
+CHECK_FLAG postman1_boss_win
+# display a textbox
+TEXTBOX You look at Steve slumped against the wall. He's not dead, just badly hurt. From behind him, you find a chainsaw. You decide to take it as compensation for this mess.
+# set flag and give chainsaw
+SET_FLAG dc_chainsaw_got
+GIVE_KEYITEM chainsaw

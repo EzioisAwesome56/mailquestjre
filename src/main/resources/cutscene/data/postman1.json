@@ -1,0 +1,66 @@
+{
+	"subdir": "postman1",
+	"frames": [
+		{
+			"textbox_text": "You walk slowly into the depths of the Damp cave. You start to wonder if this was a giant waste of time. Until...",
+			"show_nameplate": false,
+			"name": null,
+			"frame_img": "frame1"
+		},
+		{
+			"textbox_text": "You enter a seemingly dead-end room. But, on the other side is standing a human who appears to be wearing a postal worker uniform. Are they the one behind this disaster?",
+			"show_nameplate": false,
+			"name": null,
+			"frame_img": "frame2"
+		},
+		{
+			"textbox_text": "Hey you! Asshole! Did you cause this mess?",
+			"show_nameplate": true,
+			"name": "<player>",
+			"frame_img": "frame3"
+		},
+		{
+			"textbox_text": "Huh? I have no idea what you’re on about. And how’d you get past my epic puzzles??",
+			"show_nameplate": true,
+			"name": "Steve",
+			"frame_img": "reuse"
+		},
+		{
+			"textbox_text": "Puzzles? Those didn’t even require a single brain cell to beat!",
+			"show_nameplate": true,
+			"name": "<player>",
+			"frame_img": "reuse"
+		},
+		{
+			"textbox_text": "That isn’t the point! Are you the one who put a pipe bomb in my mail box AND stole my package?",
+			"show_nameplate": true,
+			"name": "<player>",
+			"frame_img": "reuse"
+		},
+		{
+			"textbox_text": "Oh, that’s why you’re here. The PostMaster told me that his plan might make some angry folks, but not to worry about being attacked.",
+			"show_nameplate": true,
+			"name": "Steve",
+			"frame_img": "reuse"
+		},
+		{
+			"textbox_text": "Well, seems like your so-called “PostMaster” was wrong. I am going to kick your shins in!",
+			"show_nameplate": true,
+			"name": "<player>",
+			"frame_img": "reuse"
+		},
+		{
+			"textbox_text": "H-h-hey wait we can talk this out I swear I di-",
+			"show_nameplate": true,
+			"name": "Steve",
+			"frame_img": "frame4"
+		},
+		{
+			"textbox_text": "ENOUGH TALKING, I’VE HAD ENOUGH OF YOUR SHIT!",
+			"show_nameplate": true,
+			"name": "<player>",
+			"frame_img": "reuse"
+		}
+	],
+	"script": "fight_postman1"
+}

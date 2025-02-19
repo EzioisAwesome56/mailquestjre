@@ -1,0 +1,8 @@
+# check if you have the chainsaw
+CHECK_FLAG dc_chainsaw_got
+# display some text
+TEXTBOX You start up the chainsaw, which screams to life. With this new-found power, you absolutely obliterate the poor dead bush blocking your way
+# set flag
+SET_FLAG grove_bush_gone
+# run script
+RUN_SCRIPT grove_load

@@ -1,0 +1,6 @@
+# show a textbox
+TEXTBOX You touched the blockade. It then suddenly disappeared for some reason. What witchcraft is this???
+# set flag to get rid of the thingy
+SET_FLAG dung1_puz2_blockdel
+# run another script
+RUN_SCRIPT dcroom2_colup

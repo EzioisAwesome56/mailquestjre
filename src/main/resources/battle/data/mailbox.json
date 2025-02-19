@@ -1,0 +1,9 @@
+{
+	"hp": 10,
+	"magic": 0,
+	"atk": 5,
+	"def": 5,
+	"name": "MailBox",
+	"graphic": "mailbox",
+	"missrate": 6
+}

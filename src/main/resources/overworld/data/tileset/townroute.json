@@ -1,0 +1,42 @@
+{
+	"tileset_name": "Basic Town Route Tileset",
+	"basefolder": "townroute",
+	"tiles": {
+		"0": {
+			"graphics": "road_bottom",
+			"walkable": true
+		},
+		"1": {
+			"graphics": "road_top",
+			"walkable": true
+		},
+		"2": {
+			"graphics": "dirtpath_down",
+			"walkable": true
+		},
+		"3": {
+			"graphics": "dirtpath_turnld",
+			"walkable": true
+		},
+		"4": {
+			"graphics": "dirtpath_straight",
+			"walkable": true
+		},
+		"5": {
+			"graphics": "sign",
+			"walkable": false
+		},
+		"6": {
+			"graphics": "chest",
+			"walkable": false
+		},
+		"7": {
+			"graphics": "tree",
+			"walkable": false
+		},
+		"8": {
+			"graphics": "grass",
+			"walkable": true
+		}
+	}
+}

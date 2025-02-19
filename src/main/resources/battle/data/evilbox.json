@@ -1,0 +1,9 @@
+{
+	"hp": 6,
+	"magic": 0,
+	"atk": 4,
+	"def": 7,
+	"name": "Evil Cardbox",
+	"graphic": "evilbox",
+	"missrate": 5
+}

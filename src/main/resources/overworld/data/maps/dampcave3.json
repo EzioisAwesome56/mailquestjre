@@ -1,0 +1,77 @@
+{
+	"tilemap": "dampcave3",
+	"tileset": "cave",
+	"mapname": "Damp Cave: Final Area",
+	"events": [
+		{
+			"activation_type": 1,
+			"flaguse": 0,
+			"flagname": "dc_chainsaw_got",
+			"event_type": 2,
+			"eventtext": "dc_chainsaw",
+			"x": 10,
+			"y": 6
+		},
+		{
+			"activation_type": 0,
+			"flaguse": 0,
+			"flagname": "postman1_boss_win",
+			"event_type": 3,
+			"eventtext": "postman1",
+			"x": 10,
+			"y": 10
+		}
+			
+	],
+	"load_script": "null",
+	"validheal": false,
+	"heal_x": 0,
+	"heal_y": 0,
+	"spawns": [
+		{
+			"x": 10,
+			"y": 13
+		}
+	],
+	"warps": [
+		{
+			"destination": "dampcave2",
+			"spawnpoint": 1,
+			"tilex": 10,
+			"tiley": 14,
+			"activation_type": 3
+		}	
+	],
+	"encountermode": 2,
+	"encounters": [
+		{
+			"id": "tux",
+			"level": 2
+		},
+		{
+			"id": "tux",
+			"level": 3
+		},
+		{
+			"id": "mailbox",
+			"level": 2
+		},
+		{
+			"id": "mailbox",
+			"level": 3
+		},
+		{
+			"id": "esckey",
+			"level": 3
+		},
+		{
+			"id": "unholywater",
+			"level": 6
+		},
+		{
+			"id": "vim",
+			"level": 5
+		}
+	],
+	"wildchance": 20
+}

@@ -1,0 +1,9 @@
+{
+	"hp": 4,
+	"magic": 0,
+	"atk": 4,
+	"def": 3,
+	"name": "Escape!",
+	"graphic": "esckey",
+	"missrate": 3
+}

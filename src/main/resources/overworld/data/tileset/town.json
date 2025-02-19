@@ -1,0 +1,102 @@
+{
+	"tileset_name": "Basic Town Tileset",
+	"basefolder": "townroute",
+	"tiles": {
+		"0": {
+			"graphics": "road_bottom",
+			"walkable": true
+		},
+		"1": {
+			"graphics": "road_top",
+			"walkable": true
+		},
+		"2": {
+			"graphics": "dirtpath_down",
+			"walkable": true
+		},
+		"3": {
+			"graphics": "dirtpath_turnld",
+			"walkable": true
+		},
+		"4": {
+			"graphics": "dirtpath_straight",
+			"walkable": true
+		},
+		"5": {
+			"graphics": "sign",
+			"walkable": false
+		},
+		"6": {
+			"graphics": "chest",
+			"walkable": false
+		},
+		"7": {
+			"graphics": "tree",
+			"walkable": false
+		},
+		"8": {
+			"graphics": "grass",
+			"walkable": true
+		},
+		"9": {
+			"graphics": "house3",
+			"walkable": false
+		},
+		"10": {
+			"graphics": "house2",
+			"walkable": false
+		},
+		"11": {
+			"graphics": "house1",
+			"walkable": false
+		},
+		"12": {
+			"graphics": "spitsign3",
+			"walkable": false
+		},
+		"13": {
+			"graphics": "spitsign2",
+			"walkable": false
+		},
+		"14": {
+			"graphics": "spitsign1",
+			"walkable": false
+		},
+		"15": {
+			"graphics": "spit6",
+			"walkable": false
+		},
+		"16": {
+			"graphics": "spit5",
+			"walkable": false
+		},
+		"17": {
+			"graphics": "spit4",
+			"walkable": false
+		},
+		"18": {
+			"graphics": "spit3",
+			"walkable": false
+		},
+		"19": {
+			"graphics": "spit2",
+			"walkable": true
+		},
+		"20": {
+			"graphics": "spit1",
+			"walkable": false
+		},
+		"21": {
+			"graphics": "deadbush",
+			"walkable": false
+		},
+		"22": {
+			"graphics": "house5",
+			"walkable": false
+		},
+		"23": {
+			"graphics": "house4",
+			"walkable": true
+		}
+	}
+}

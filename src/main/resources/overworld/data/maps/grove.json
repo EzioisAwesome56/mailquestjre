@@ -1,0 +1,109 @@
+{
+	"tilemap": "grove",
+	"tileset": "town",
+	"mapname": "Grove Town",
+	"events": [
+		{
+			"activation_type": 1,
+			"flaguse": 2,
+			"flagname": null,
+			"event_type": 0,
+			"eventtext": "Game tips: This is a hospital. You can come here to heal for free and buy items. You will respawn in front of the last one you healed at if you run out of HP!",
+			"x": 3,
+			"y": 8
+		},
+		{
+			"activation_type": 1,
+			"flaguse": 2,
+			"flagname": null,
+			"event_type": 0,
+			"eventtext": "Warning: spooky cave ahead! DO NOT ENTER unless you do not care about your own safety!",
+			"x": 10,
+			"y": 5
+		},
+		{
+			"activation_type": 1,
+			"flaguse": 2,
+			"flagname": null,
+			"event_type": 0,
+			"eventtext": "Crudely written on this sign is: \"HAHA! You can never advance to Teac Town! I have planted this bush in the way! Come and get my chainsaw if you dare!\"",
+			"x": 13,
+			"y": 14
+		},
+		{
+			"activation_type": 1,
+			"flaguse": 0,
+			"flagname": "grove_bush_gone",
+			"event_type": 2,
+			"eventtext": "grove_bush_script",
+			"x": 14,
+			"y": 14
+		}
+	],
+	"warps": [
+		{
+			"destination": "route1",
+			"spawnpoint": 1,
+			"tilex": 0,
+			"tiley": 16,
+			"activation_type": 2
+		},
+		{
+			"destination": "route1",
+			"spawnpoint": 1,
+			"tilex": 0,
+			"tiley": 17,
+			"activation_type": 2
+		},
+		{
+			"destination": "spit_grove",
+			"spawnpoint": 0,
+			"tilex": 4,
+			"tiley": 6,
+			"activation_type": 0
+		},
+		{
+			"destination": "dampcave1",
+			"spawnpoint": 0,
+			"tilex": 10,
+			"tiley": 0,
+			"activation_type": 4
+		},
+		{
+			"destination": "end_demo",
+			"spawnpoint": 0,
+			"tilex": 19,
+			"tiley": 9,
+			"activation_type": 1
+		},
+		{
+			"destination": "end_demo",
+			"spawnpoint": 0,
+			"tilex": 19,
+			"tiley": 10,
+			"activation_type": 1
+		}
+	],
+	"load_script": "grove_load",
+	"validheal": true,
+	"heal_x": 4,
+	"heal_y": 7,
+	"heal_spawn": 1,
+	"spawns": [
+		{
+			"x": 1,
+			"y": 16
+		},
+		{
+			"x": 4,
+			"y": 7
+		},
+		{
+			"x": 10,
+			"y": 1
+		}
+	],
+	"encountermode": 0,
+	"encounters": [],
+	"wildchance": 1
+}

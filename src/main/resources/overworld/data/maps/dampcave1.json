@@ -1,0 +1,115 @@
+{
+	"tilemap": "dampcave1",
+	"tileset": "cave",
+	"mapname": "Damp Cave: Area 1",
+	"events": [
+		{
+			"activation_type": 1,
+			"flaguse": 2,
+			"flagname": null,
+			"event_type": 0,
+			"eventtext": "Game tips: It's very moist in this cave. Try not to breath in too much mold!",
+			"x": 3,
+			"y": 12
+		},
+		{
+			"activation_type": 1,
+			"flaguse": 2,
+			"flagname": null,
+			"event_type": 0,
+			"eventtext": "Rules: talk to the computer and solve 3 math problems. If you get anything wrong, you will get attacked and will have to start over. Completing them will allow you to pass the blockade.",
+			"x": 9,
+			"y": 6
+		},
+		{
+			"activation_type": 1,
+			"flaguse": 1,
+			"flagname": "dung1_puz1_pass",
+			"event_type": 2,
+			"eventtext": "dcpuz1",
+			"x": 14,
+			"y": 6
+		},
+		{
+			"activation_type": 1,
+			"flaguse": 2,
+			"flagname": null,
+			"event_type": 1,
+			"eventtext": "1",
+			"x": 10,
+			"y": 6
+		},
+		{
+			"activation_type": 1,
+			"flaguse": 2,
+			"flagname": null,
+			"event_type": 1,
+			"eventtext": "1",
+			"x": 11,
+			"y": 6
+		}
+			
+	],
+	"load_script": "dcroom1_colup",
+	"validheal": false,
+	"heal_x": 0,
+	"heal_y": 0,
+	"spawns": [
+		{
+			"x": 2,
+			"y": 14
+		},
+		{
+			"x": 14,
+			"y": 2
+		}
+	],
+	"warps": [
+		{
+			"destination": "grove",
+			"spawnpoint": 2,
+			"tilex": 2,
+			"tiley": 15,
+			"activation_type": 3
+		},
+		{
+			"destination": "dampcave2",
+			"spawnpoint": 0,
+			"tilex": 14,
+			"tiley": 1,
+			"activation_type": 4
+		}	
+	],
+	"encountermode": 2,
+	"encounters": [
+		{
+			"id": "tux",
+			"level": 2
+		},
+		{
+			"id": "tux",
+			"level": 3
+		},
+		{
+			"id": "mailbox",
+			"level": 2
+		},
+		{
+			"id": "mailbox",
+			"level": 3
+		},
+		{
+			"id": "esckey",
+			"level": 3
+		},
+		{
+			"id": "esckey",
+			"level": 4
+		},
+		{
+			"id": "vim",
+			"level": 5
+		}
+	],
+	"wildchance": 20
+}

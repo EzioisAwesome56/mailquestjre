@@ -1,0 +1,9 @@
+{
+	"hp": 11,
+	"magic": 0,
+	"atk": 8,
+	"def": 7,
+	"name": "Steve",
+	"graphic": "steve",
+	"missrate": 2
+}

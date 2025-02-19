@@ -1,0 +1,5 @@
+# give player weapon 1 (baseball bat)
+GIVE_WEAPON 1
+# set flag that it was given to player
+SET_FLAG route1_gotbat
+TEXTBOX Opening the treasure chest, you find an old and well-worn baseball bat. You feel a strange aura coming from it, so you decide to take it with you.

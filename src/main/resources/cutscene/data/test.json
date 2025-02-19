@@ -1,0 +1,30 @@
+{
+	"subdir": ".",
+	"frames": [
+		{
+			"textbox_text": "This is a test cutscene, designed to test the cutscene engine's programming!",
+			"show_nameplate": false,
+			"name": null,
+			"frame_img": "test-01"
+		},
+		{
+			"textbox_text": "This is a test of the \"reuse\" engine flag!",
+			"show_nameplate": false,
+			"name": null,
+			"frame_img": "reuse"
+		},
+		{
+			"textbox_text": "This is a test of enablaing the nameplate feature in a cutscene!",
+			"show_nameplate": true,
+			"name": "debug.exe",
+			"frame_img": "reuse"
+		},
+		{
+			"textbox_text": "This is a test of the player string replace! <player> <player> <player>",
+			"show_nameplate": true,
+			"name": "<player>",
+			"frame_img": "reuse"
+		}
+	],
+	"script": "cuttest"
+}

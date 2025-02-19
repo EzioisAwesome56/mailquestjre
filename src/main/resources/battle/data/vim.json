@@ -1,0 +1,9 @@
+{
+	"hp": 11,
+	"magic": 0,
+	"atk": 6,
+	"def": 2,
+	"name": "VIM",
+	"graphic": "vim",
+	"missrate": 9
+}

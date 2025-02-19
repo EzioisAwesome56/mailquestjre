@@ -1,0 +1,6 @@
+# check for flag "dung1_puz1_blockdel", if false we return el
+CHECK_FLAG dung1_puz1_blockdel
+# update the tilemap
+MOD_TILEMAP 14 5 4
+# remove event with flagname "dung1_puz1_pass"
+DEL_EVENT dung1_puz1_pass

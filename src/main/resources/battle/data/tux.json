@@ -1,0 +1,9 @@
+{
+	"hp": 7,
+	"magic": 0,
+	"atk": 3,
+	"def": 3,
+	"name": "Angry Tux",
+	"graphic": "tux",
+	"missrate": 3
+}

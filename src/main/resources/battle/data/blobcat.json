@@ -1,0 +1,9 @@
+{
+	"hp": 7,
+	"magic": 0,
+	"atk": 7,
+	"def": 6,
+	"name": "Blobcat",
+	"graphic": "blobcat",
+	"missrate": 6
+}

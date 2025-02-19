@@ -1,0 +1,42 @@
+{
+	"tileset_name": "Indoor Hospital Tileset",
+	"basefolder": "spit",
+	"tiles": {
+		"0": {
+			"graphics": "shopkeep4",
+			"walkable": false
+		},
+		"1": {
+			"graphics": "shopkeep3",
+			"walkable": false
+		},
+		"2": {
+			"graphics": "shopkeep2",
+			"walkable": false
+		},
+		"3": {
+			"graphics": "shopkeep1",
+			"walkable": false
+		},
+		"4": {
+			"graphics": "door",
+			"walkable": true
+		},
+		"5": {
+			"graphics": "healmachine",
+			"walkable": false
+		},
+		"6": {
+			"graphics": "counter",
+			"walkable": false
+		},
+		"7": {
+			"graphics": "floor",
+			"walkable": true
+		},
+		"8": {
+			"graphics": "wall",
+			"walkable": false
+		}
+	}
+}

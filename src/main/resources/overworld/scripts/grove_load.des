@@ -1,0 +1,6 @@
+# check for flag
+CHECK_FLAG grove_bush_gone
+# update tilemap
+MOD_TILEMAP 15 14 8
+# delete event
+DEL_EVENT grove_bush_gone

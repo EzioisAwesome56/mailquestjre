@@ -1,0 +1,58 @@
+{
+	"tileset_name": "Indoor tileset",
+	"basefolder": "indoor",
+	"tiles": {
+		"0": {
+			"graphics": "bed4",
+			"walkable": false
+		},
+		"1": {
+			"graphics": "bed3",
+			"walkable": false
+		},
+		"2": {
+			"graphics": "bed2",
+			"walkable": false
+		},
+		"3": {
+			"graphics": "bed1",
+			"walkable": false
+		},
+		"4": {
+			"graphics": "table4",
+			"walkable": false
+		},
+		"5": {
+			"graphics": "table3",
+			"walkable": false
+		},
+		"6": {
+			"graphics": "table2",
+			"walkable": false
+		},
+		"7": {
+			"graphics": "table1",
+			"walkable": false
+		},
+		"8": {
+			"graphics": "door",
+			"walkable": true
+		},
+		"9": {
+			"graphics": "wall",
+			"walkable": false
+		},
+		"10": {
+			"graphics": "chest",
+			"walkable": false
+		},
+		"11": {
+			"graphics": "sign",
+			"walkable": false
+		},
+		"12": {
+			"graphics": "floor",
+			"walkable": true
+		}
+	}
+}

@@ -1,0 +1,46 @@
+{
+	"tileset_name": "Cave Tileset",
+	"basefolder": "cave",
+	"tiles": {
+		"0": {
+			"graphics": "cavepc4",
+			"walkable": false
+		},
+		"1": {
+			"graphics": "cavepc3",
+			"walkable": false
+		},
+		"2": {
+			"graphics": "cavepc2",
+			"walkable": false
+		},
+		"3": {
+			"graphics": "cavepc1",
+			"walkable": false
+		},
+		"4": {
+			"graphics": "cavefloor",
+			"walkable": true
+		},
+		"5": {
+			"graphics": "cavesign",
+			"walkable": false
+		},
+		"6": {
+			"graphics": "caveexit",
+			"walkable": true
+		},
+		"7": {
+			"graphics": "wall",
+			"walkable": false
+		},
+		"8": {
+			"graphics": "caveblock",
+			"walkable": false
+		},
+		"9": {
+			"graphics": "cavedoorin",
+			"walkable": true
+		}
+	}
+}

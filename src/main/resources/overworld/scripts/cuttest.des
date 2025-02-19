@@ -1,0 +1,4 @@
+# haha test code
+TEXTBOX This is a test of end-of-cutscene script execution!
+ENCOUNTER evilbox 10
+MOD_FIGHTTYPE 2
