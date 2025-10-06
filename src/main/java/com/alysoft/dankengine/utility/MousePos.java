@@ -1,4 +1,4 @@
-package com.eziosoft.mailquestjre.stuff;
+package com.alysoft.dankengine.utility;
 
 public class MousePos {
 

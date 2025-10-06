@@ -1,6 +1,8 @@
 package com.eziosoft.mailquestjre.stuff;
 
-import com.eziosoft.mailquestjre.Main;
+import com.alysoft.dankengine.Main;
+import com.alysoft.dankengine.utility.DankButtons;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.gameStates.BattleState;
 import com.eziosoft.mailquestjre.gameStates.CutsceneState;
 import com.eziosoft.mailquestjre.gameStates.ObjectSortMinigameState;
@@ -8,7 +10,6 @@ import com.eziosoft.mailquestjre.gameStates.OverworldState;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
 import org.apache.commons.lang3.SystemUtils;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class DebugHelper {
@@ -21,7 +22,7 @@ public class DebugHelper {
     private static boolean didbuff = false;
 
     public static void OverworldMenuDebug(ArrayList keys){
-        if (keys.contains(KeyEvent.VK_NUMPAD8)) {
+        if (keys.contains(DankButtons.INPUT_DEBUG1)) {
             // todo: this is a secret debugging thing
             //      to start a battle with some init code
             BattleState thestate = (BattleState) Main.getState(GameStates.BATTLE.id);
@@ -30,13 +31,13 @@ public class DebugHelper {
             thestate.setWildEncounterText();
             // switch states
             Main.current_state = 1;
-        } else if (keys.contains(KeyEvent.VK_NUMPAD7)){
+        } else if (keys.contains(DankButtons.INPUT_DEBUG2)){
             // disable all encounters for this area. good god this is annoying as hell
             ((OverworldState) Main.getState(GameStates.OVERWORLD.id)).setEncounterState(true);
-        } else if (keys.contains(KeyEvent.VK_NUMPAD4)){
+        } else if (keys.contains(DankButtons.INPUT_DEBUG3)){
             // renable encounters
             ((OverworldState) Main.getState(GameStates.OVERWORLD.id)).setEncounterState(false);
-        } else if (keys.contains(KeyEvent.VK_NUMPAD5)){
+        } else if (keys.contains(DankButtons.INPUT_DEBUG4)){
             // force close the menu
             ReflectionUtils.forceMenuClosed();
             // switch to sort minigame state
@@ -45,7 +46,7 @@ public class DebugHelper {
             state.resetState();
             // switch to it next frame
             Main.current_state = GameStates.OBJSORT.id;
-        } else if (keys.contains(KeyEvent.VK_NUMPAD9)){
+        } else if (keys.contains(DankButtons.INPUT_DEBUG5)){
             // 9 is the debug key to start a cutscene!
             // load our cutscene engine
             CutsceneState state = (CutsceneState) Main.getState(GameStates.CUTSCENE.id);
@@ -55,17 +56,17 @@ public class DebugHelper {
             state.loadCutscene("postman1");
             // switch scenes
             Main.current_state = GameStates.CUTSCENE.id;
-        } else if (keys.contains(KeyEvent.VK_NUMPAD6)){
+        } else if (keys.contains(DankButtons.INPUT_DEBUG6)){
             if (!didbuff) {
                 // buff the shit out of the player
-                Main.player.addAtk(999);
-                Main.player.addHP(999);
-                Main.player.addDef(999);
-                Main.player.fully_heal();
-                System.err.println("Buffed the shit out of the player. Do not expect balance");
+                MailQuestJRE.player.addAtk(999);
+                MailQuestJRE.player.addHP(999);
+                MailQuestJRE.player.addDef(999);
+                MailQuestJRE.player.fully_heal();
+                Main.logError("Buffed the shit out of the player. Do not expect balance");
                 didbuff = true;
             }
-        } else if (keys.contains(KeyEvent.VK_NUMPAD1)){
+        } else if (keys.contains(DankButtons.INPUT_DEBUG7)){
             // prompt for map to load
             TextEntryPrompt prompt = new TextEntryPrompt("Enter map name to load");
             String map;
@@ -85,7 +86,7 @@ public class DebugHelper {
     }
 
     public static void loadMapDebug(){
-        System.err.println("Force loading map route1...");
+        Main.logError("Force loading map route1...");
         // get the overworld state
         OverworldState ow = (OverworldState) Main.getState(GameStates.OVERWORLD.id);
         // set the variables as they should be
@@ -106,7 +107,7 @@ public class DebugHelper {
         FileUtils.write(new File("bruh.json"), why);
 
          */
-        System.err.println(SystemUtils.JAVA_VERSION);
+        Main.logError(SystemUtils.JAVA_VERSION);
 
     }
 }

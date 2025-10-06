@@ -1,8 +1,11 @@
 package com.eziosoft.mailquestjre.renderObjects;
 
-import java.awt.*;
+import com.alysoft.dankengine.backends.base.GraphicsBackend;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.renderer.DankColor;
+import com.alysoft.dankengine.renderer.DankFont;
 
-public class ItemMenuTabRenderer implements DrawableObject{
+public class ItemMenuTabRenderer implements DrawableObject {
     private int tab;
     private boolean solid_arrow = true;
 
@@ -14,32 +17,28 @@ public class ItemMenuTabRenderer implements DrawableObject{
     }
 
     @Override
-    public void drawObject(Graphics2D gfx) {
+    public void drawObject(GraphicsBackend gfx) {
        // set color and draw one really long box
-        gfx.setColor(Color.pink);
-        gfx.fillRect(0, 0, 500, 50);
+        gfx.drawRectangleFilled(0, 0, 500, 50, DankColor.pink);
         // draw 3 smaller inner rectangles
-        gfx.setColor(Color.lightGray);
-        gfx.fillRect(8, 8, 150, 34);
-        gfx.fillRect(174, 8, 150, 34);
-        gfx.fillRect(340, 8, 151, 34);
+        gfx.drawRectangleFilled(8, 8, 150, 34, DankColor.lightGray);
+        gfx.drawRectangleFilled(174, 8, 150, 34, DankColor.lightGray);
+        gfx.drawRectangleFilled(340, 8, 151, 34, DankColor.lightGray);
         // set font and color
-        gfx.setColor(Color.BLACK);
-        gfx.setFont(new Font("helvetica", Font.PLAIN, 25));
+        DankFont thefont = new DankFont("helvetica", 0, 25);
         // draw "Items" text
-        gfx.drawString("Items", 32, 34);
+        gfx.drawTextSimple(32, 34, thefont, DankColor.black, "Items");
         // draw weapons text
-        gfx.drawString("Weapons", 200, 34);
+        gfx.drawTextSimple(200, 34, thefont, DankColor.black, "Weapons");
         // draw key items textt
-        gfx.drawString("Key Item", 370, 34);
+        gfx.drawTextSimple(370, 34, thefont, DankColor.black, "Key Item");
         // change color and draw selection arrow
-        gfx.setColor(Color.green);
         if (this.solid_arrow){
             // draw it solid
-            gfx.fillPolygon(new int[]{10 + (this.tab * 166), 10 + (this.tab * 166), 25 + (this.tab * 166)}, new int[]{10, 40, 25}, 3);
+            gfx.drawPolygonFilled(new int[]{10 + (this.tab * 166), 10 + (this.tab * 166), 25 + (this.tab * 166)}, new int[]{10, 40, 25}, 3, DankColor.green);
         } else {
             // draw it without filling it in
-            gfx.drawPolygon(new int[]{10 + (this.tab * 166), 10 + (this.tab * 166), 25 + (this.tab * 166)}, new int[]{10, 40, 25}, 3);
+            gfx.drawPolygon(new int[]{10 + (this.tab * 166), 10 + (this.tab * 166), 25 + (this.tab * 166)}, new int[]{10, 40, 25}, 3, DankColor.green);
         }
     }
 }

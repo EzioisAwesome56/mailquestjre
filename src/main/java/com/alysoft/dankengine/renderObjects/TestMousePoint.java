@@ -1,6 +1,8 @@
-package com.eziosoft.mailquestjre.renderObjects;
+package com.alysoft.dankengine.renderObjects;
 
-import java.awt.*;
+import com.alysoft.dankengine.backends.base.GraphicsBackend;
+import com.alysoft.dankengine.renderer.DankColor;
+
 import java.util.ArrayList;
 
 public class TestMousePoint implements DrawableObject{
@@ -13,10 +15,9 @@ public class TestMousePoint implements DrawableObject{
     }
 
     @Override
-    public void drawObject(Graphics2D gfx) {
+    public void drawObject(GraphicsBackend gfx) {
         for (int[] pair : this.points){
-            gfx.setColor(Color.magenta);
-            gfx.fillRect(pair[0], pair[1], 1, 1);
+            gfx.drawRectangleFilled(pair[0], pair[1], 1, 1, DankColor.magenta);
         }
     }
 }

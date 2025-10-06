@@ -1,20 +1,20 @@
 package com.eziosoft.mailquestjre.gameStates;
 
-import com.eziosoft.mailquestjre.Main;
-import com.eziosoft.mailquestjre.renderObjects.DrawableObject;
+import com.alysoft.dankengine.Main;
+import com.alysoft.dankengine.gameStates.GameState;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.renderer.DankGraphic;
+import com.alysoft.dankengine.utility.DankButtons;
+import com.alysoft.dankengine.utility.MousePos;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.renderObjects.SimpleImageRenderer;
 import com.eziosoft.mailquestjre.renderObjects.TitleScreenOptionsRenderer;
-import com.eziosoft.mailquestjre.stuff.MousePos;
 import com.eziosoft.mailquestjre.stuff.Player;
 import com.eziosoft.mailquestjre.stuff.SaveFileUtils;
 import com.eziosoft.mailquestjre.stuff.TextEntryPrompt;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
 
-import javax.imageio.ImageIO;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 public class TitleScreenState implements GameState {
@@ -25,7 +25,7 @@ public class TitleScreenState implements GameState {
     private int framecounter = 0;
 
     // stuff for caching loaded resources
-    private BufferedImage logoimg;
+    private DankGraphic logoimg;
 
     @Override
     public void preformState(ArrayList<DrawableObject> renderlist, ArrayList<Integer> keys, MousePos mouse) {
@@ -38,17 +38,17 @@ public class TitleScreenState implements GameState {
         renderlist.add(options);
         // handle user input
         if (this.framecounter == 0) {
-            if (keys.contains(KeyEvent.VK_DOWN)) {
+            if (keys.contains(DankButtons.INPUT_DOWN)) {
                 // add 1 to selected menu item
                 this.menu_item += 1;
                 // put 10 frames on the counter
                 this.framecounter = 10;
-            } else if (keys.contains(KeyEvent.VK_UP)){
+            } else if (keys.contains(DankButtons.INPUT_UP)){
                 // subtract 1
                 this.menu_item -= 1;
                 // put 10 frames on the counter
                 this.framecounter = 10;
-            } else if (keys.contains(KeyEvent.VK_Z)){
+            } else if (keys.contains(DankButtons.INPUT_ACTION)){
                 // handle it
                 this.doMenuSelection();
             }
@@ -73,11 +73,7 @@ public class TitleScreenState implements GameState {
     // load the logo image
     private void loadLogo(){
         try {
-            // get the input stream of the resource we need
-            InputStream stream = TitleScreenState.class.getResourceAsStream("/title/logo.png");
-            this.logoimg = ImageIO.read(stream);
-            // close the stream
-            stream.close();
+            this.logoimg = Main.getFunctionalBackend().getEngineGraphicResource("/title/logo.png");
         } catch (IOException e){
             // rethrow it
             throw new RuntimeException("Error while loading assets", e);
@@ -92,7 +88,7 @@ public class TitleScreenState implements GameState {
             // if there is not a save file, add 1 and then we can continue like normal
             sel += 1;
         }
-        if (Main.debugging) System.err.println("Option Selected: " + sel);
+        if (MailQuestJRE.debugging) Main.getFunctionalBackend().logError("Option Selected: " + sel);
         switch (sel){
             case 0:
                 // continue
@@ -142,7 +138,7 @@ public class TitleScreenState implements GameState {
             while (!valid) {
                 name = prompt.doPrompt();
                 if (name.length() > 10 || name.isEmpty()){
-                    if (Main.debugging) System.err.println("Not a valid name!");
+                    if (MailQuestJRE.debugging) Main.getFunctionalBackend().logError("Not a valid name!");
                 } else {
                     // valid name
                     valid = true;
@@ -155,7 +151,7 @@ public class TitleScreenState implements GameState {
         // get rid of it
         prompt.destroy();
         // create a new player
-        Main.player = new Player(name);
+        MailQuestJRE.player = new Player(name);
     }
 
     // ensure the user wants to delete their save file

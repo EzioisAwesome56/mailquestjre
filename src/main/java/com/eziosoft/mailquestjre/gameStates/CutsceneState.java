@@ -1,26 +1,24 @@
 package com.eziosoft.mailquestjre.gameStates;
 
-import com.eziosoft.mailquestjre.Main;
+import com.alysoft.dankengine.Main;
+import com.alysoft.dankengine.gameStates.GameState;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.renderObjects.TextboxObject;
+import com.alysoft.dankengine.renderer.DankGraphic;
+import com.alysoft.dankengine.utility.DankButtons;
+import com.alysoft.dankengine.utility.MousePos;
+import com.alysoft.dankengine.utility.TextSlicer;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.json.CutsceneFrame;
 import com.eziosoft.mailquestjre.json.CutsceneMetaFile;
-import com.eziosoft.mailquestjre.renderObjects.DrawableObject;
 import com.eziosoft.mailquestjre.renderObjects.SimpleImageRenderer;
-import com.eziosoft.mailquestjre.renderObjects.TextboxObject;
 import com.eziosoft.mailquestjre.stuff.MapScriptParser;
-import com.eziosoft.mailquestjre.stuff.MousePos;
-import com.eziosoft.mailquestjre.stuff.TextSlicer;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
-import org.apache.commons.io.IOUtils;
 
-import javax.imageio.ImageIO;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-public class CutsceneState implements GameState{
+public class CutsceneState implements GameState {
     // state variables
     private CutsceneMetaFile cutscene_file;
     private int current_frame = 0;
@@ -32,7 +30,7 @@ public class CutsceneState implements GameState{
     private TextSlicer slicer;
     private String nameplate_text;
     private boolean loadNextFrame = true;
-    private BufferedImage loaded_background;
+    private DankGraphic loaded_background;
     private boolean exit_cutscene = false;
 
     // reset the cutscene engine to a known-good state
@@ -49,14 +47,10 @@ public class CutsceneState implements GameState{
     public void loadCutscene(String name){
         CutsceneMetaFile meta;
         try {
-            // try to open a stream to get the information
-            InputStream stream = CutsceneState.class.getResourceAsStream("/cutscene/data/" + name + ".json");
-            // read it to a string
-            String tmp = IOUtils.toString(stream, StandardCharsets.UTF_8);
-            // close the stream
-            stream.close();
+            // get our resource
+            String tmp = Main.getFunctionalBackend().getEngineTextResource("/cutscene/data/" + name + ".json");
             // make gson read it to what we want
-            meta = Main.gson.fromJson(tmp, CutsceneMetaFile.class);
+            meta = MailQuestJRE.gson.fromJson(tmp, CutsceneMetaFile.class);
         } catch (IOException e){
             // something broke, throw it
             throw new RuntimeException("Something went wrong trying to load cutscene meta file", e);
@@ -80,7 +74,7 @@ public class CutsceneState implements GameState{
             // set the text
             // bonus feature: if <player>, replace with player's name
             String tmp = frame.getDisplayName();
-            tmp = tmp.replace("<player>", Main.player.getName());
+            tmp = tmp.replace("<player>", MailQuestJRE.player.getName());
             this.nameplate_text = tmp;
         }
         // do we even want to load the next frame?
@@ -101,12 +95,7 @@ public class CutsceneState implements GameState{
             }
             path += frame.getFrame_img() + ".png";
             try {
-                // open it as a stream
-                InputStream stream = CutsceneState.class.getResourceAsStream(path);
-                // read it into our object
-                this.loaded_background = ImageIO.read(stream);
-                // close the stream
-                stream.close();
+                this.loaded_background = Main.getFunctionalBackend().getEngineGraphicResource(path);
             } catch (IOException e) {
                 throw new RuntimeException("Something broke while trying to load cutscene graphics", e);
             }
@@ -153,7 +142,7 @@ public class CutsceneState implements GameState{
                 // update the state of the textbox arrow
                 txt.setArrowState(this.show_arrow);
                 // check for input
-                if  (keys.contains(KeyEvent.VK_Z)){
+                if  (keys.contains(DankButtons.INPUT_ACTION)){
                     // increment current frame
                     this.current_frame += 1;
                     // are we out of frames?

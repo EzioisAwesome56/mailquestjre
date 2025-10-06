@@ -1,6 +1,8 @@
 package com.eziosoft.mailquestjre.stuff;
 
-import com.eziosoft.mailquestjre.Main;
+import com.alysoft.dankengine.Main;
+import com.alysoft.dankengine.utility.TextSlicer;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.gameStates.BattleState;
 import com.eziosoft.mailquestjre.gameStates.OverworldState;
 import com.eziosoft.mailquestjre.json.MapEvent;
@@ -84,7 +86,7 @@ public class ReflectionUtils {
             // undo the hackery
             curmap.setAccessible(false);
             // done
-            if (Main.debugging) System.err.println("Deleted event with flag: " + flagname);
+            if (MailQuestJRE.debugging) System.err.println("Deleted event with flag: " + flagname);
         } catch (Exception e){
             // oh dear lord
             throw new RuntimeException("Error while trying to delete event via reflection", e);

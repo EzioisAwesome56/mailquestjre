@@ -1,8 +1,9 @@
 package com.eziosoft.mailquestjre.renderObjects;
 
-import java.awt.*;
-
-public class SortObject implements DrawableObject{
+import com.alysoft.dankengine.backends.base.GraphicsBackend;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.renderer.DankColor;
+public class SortObject implements DrawableObject {
     // variables
     private boolean isRed;
     private int x;
@@ -27,16 +28,14 @@ public class SortObject implements DrawableObject{
 
 
     @Override
-    public void drawObject(Graphics2D gfx) {
+    public void drawObject(GraphicsBackend gfx) {
         // set color based on variable
         if (this.isRed){
-            gfx.setColor(Color.RED);
             // draw a 50x50 box
-            gfx.fillRect(this.x, this.y, 50, 50);
+            gfx.drawRectangleFilled(this.x, this.y, 50, 50, DankColor.red);
         } else {
-            gfx.setColor(Color.BLUE);
             // draw a circle
-            gfx.fillOval(this.x, this.y, 50, 50);
+            gfx.drawCircleFilled(this.x, this.y, 50, DankColor.blue);
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.eziosoft.mailquestjre.stuff;
 
-import com.eziosoft.mailquestjre.Main;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.entities.BattleEntity;
 import com.eziosoft.mailquestjre.stuff.enums.PlayerWeapons;
 
@@ -36,7 +36,7 @@ public class Player implements BattleEntity {
         this.level = 1;
         // we need RNG for this
         // edit 2-6-2025: switch to global random function
-        Random rand = Main.random;
+        Random rand = MailQuestJRE.random;
         // generate HP
         this.maxhp = Math.abs(rand.nextInt(3)) + 9;
         this.hp = this.maxhp;
@@ -89,14 +89,14 @@ public class Player implements BattleEntity {
     public int performRegularAttack(BattleEntity target) {
         // first, preform rng on if we miss or not
         assert this.miss_rate > 0;
-        int miss = Main.random.nextInt(this.miss_rate);
+        int miss = MailQuestJRE.random.nextInt(this.miss_rate);
         if (miss % 4 == 3){
             // you missed, dumbass
             return -1;
         }
         // otherwise, calculate damage based on your attack and their defense
         // also add bonus damage from equipped weapon
-        int dmg = ((this.atk + this.equipped_weapon.dmg) - (target.getDef() - Main.random.nextInt(3))) + 1;
+        int dmg = ((this.atk + this.equipped_weapon.dmg) - (target.getDef() - MailQuestJRE.random.nextInt(3))) + 1;
         // ensure you do atleast 1 damage
         if (dmg <= 0) dmg = 1;
         return dmg;

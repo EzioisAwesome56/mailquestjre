@@ -1,13 +1,10 @@
 package com.eziosoft.mailquestjre.stuff;
 
-import com.eziosoft.mailquestjre.Main;
+import com.alysoft.dankengine.Main;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.json.KeyItemTextStorage;
-import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
 public class KeyItemFlavorText {
     private KeyItemTextStorage storage;
@@ -16,19 +13,14 @@ public class KeyItemFlavorText {
     public KeyItemFlavorText(){
         // attempt to load the file
         try {
-            InputStream stream = KeyItemFlavorText.class.getResourceAsStream("/title/keyitems.json");
             // read to string
-            String string = IOUtils.toString(stream, StandardCharsets.UTF_8);
+            String string = Main.getFunctionalBackend().getEngineTextResource("/title/keyitems.json");
             // close stream
-            stream.close();
             // convert to object
-            this.storage = Main.gson.fromJson(string, KeyItemTextStorage.class);
+            this.storage = MailQuestJRE.gson.fromJson(string, KeyItemTextStorage.class);
         } catch (IOException e){
             // explode
-            // TODO: have early loads caught by an error handler or something
-            System.err.println("oops the key item loader broke");
-            e.printStackTrace();
-            System.exit(2);
+            throw new RuntimeException("Error while trying to load keyitem flavor text", e);
         }
     }
 

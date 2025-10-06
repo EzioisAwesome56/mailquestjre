@@ -1,6 +1,7 @@
 package com.eziosoft.mailquestjre.stuff.predefs;
 
-import com.eziosoft.mailquestjre.Main;
+import com.alysoft.dankengine.Main;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.gameStates.ObjectSortMinigameState;
 import com.eziosoft.mailquestjre.stuff.PredefinedFunctions;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
@@ -10,7 +11,7 @@ public class StartObjSort extends PredefinedFunctions {
     public void doPredef() {
         // check to see if they already won or not
         try {
-            if ((boolean) Main.state_storage.get("dung1_puz2_pass")) {
+            if ((boolean) MailQuestJRE.state_storage.get("dung1_puz2_pass")) {
                 // we don't need to play the minigame again
                 return;
             }

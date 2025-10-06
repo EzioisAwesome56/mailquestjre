@@ -1,6 +1,7 @@
-package com.eziosoft.mailquestjre.renderObjects;
+package com.alysoft.dankengine.renderObjects;
 
-import java.awt.*;
+import com.alysoft.dankengine.backends.base.GraphicsBackend;
+import com.alysoft.dankengine.renderer.DankColor;
 
 public class exampleObj implements DrawableObject {
 
@@ -44,9 +45,8 @@ public class exampleObj implements DrawableObject {
     }
 
     @Override
-    public void drawObject(Graphics2D gfx) {
+    public void drawObject(GraphicsBackend gfx) {
         // draw a square
-        gfx.setColor(Color.MAGENTA);
-        gfx.fillRect(this.x, this.y, 50, 50);
+        gfx.drawRectangleFilled(this.x, this.y, 50, 50, DankColor.magenta);
     }
 }

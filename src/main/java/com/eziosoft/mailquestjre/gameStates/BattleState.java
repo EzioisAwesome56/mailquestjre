@@ -1,20 +1,20 @@
 package com.eziosoft.mailquestjre.gameStates;
 
+import com.alysoft.dankengine.Main;
+import com.alysoft.dankengine.gameStates.GameState;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.utility.DankButtons;
+import com.alysoft.dankengine.utility.MousePos;
+import com.alysoft.dankengine.utility.TextSlicer;
 import com.eziosoft.mailquestjre.renderObjects.*;
 import com.eziosoft.mailquestjre.stuff.Player;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
-import org.apache.commons.io.IOUtils;
-import com.eziosoft.mailquestjre.Main;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.entities.SimpleEntity;
 import com.eziosoft.mailquestjre.json.FightableEntity;
 import com.eziosoft.mailquestjre.entities.BattleEntity;
-import com.eziosoft.mailquestjre.stuff.MousePos;
-import com.eziosoft.mailquestjre.stuff.TextSlicer;
 
-import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,14 +127,12 @@ public class BattleState implements GameState {
         // attempt to load json data for what we want to fight
         String json;
         try {
-            InputStream stream = BattleState.class.getResourceAsStream("/battle/data/" + name + ".json");
-            json = IOUtils.toString(stream, StandardCharsets.UTF_8);
+            json = Main.getFunctionalBackend().getEngineTextResource("/battle/data/" + name + ".json");
         } catch (IOException e){
-            System.err.println("Either the data you requested does not exist, or an error occured");
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error trying to load battle data", e);
         }
         // then, read the object from the json data
-        FightableEntity ent = Main.gson.fromJson(json, FightableEntity.class);
+        FightableEntity ent = MailQuestJRE.gson.fromJson(json, FightableEntity.class);
         // fill out the things we need
         // TODO: this may need a rework later
         //      if i end up making more entities
@@ -155,23 +153,23 @@ public class BattleState implements GameState {
             // increase level by 1
             this.foe.increaseLevel();
             // increase all states randomly
-            this.foe.addAtk(Main.random.nextInt(3) + 1);
-            this.foe.addDef(Main.random.nextInt(3) + 1);
-            this.foe.addHP(Main.random.nextInt(5) + 1);
+            this.foe.addAtk(MailQuestJRE.random.nextInt(3) + 1);
+            this.foe.addDef(MailQuestJRE.random.nextInt(3) + 1);
+            this.foe.addHP(MailQuestJRE.random.nextInt(5) + 1);
             // only add magic if the foe already has atleast 1 mp
             if (this.foe.getMaxMagic() > 0){
-                this.foe.addMagic(Main.random.nextInt(2) + 1);
+                this.foe.addMagic(MailQuestJRE.random.nextInt(2) + 1);
             }
         }
     }
 
     private void loadPlayer(){
-        if (Main.player == null){
+        if (MailQuestJRE.player == null){
             System.err.println("You are trying to enter a battle without having a character!");
             System.err.println("That's illegal, bailing out");
             throw new RuntimeException("Attempted to start battle without character");
         }
-        this.player = Main.player;
+        this.player = MailQuestJRE.player;
         this.player_sprite = new BattleSprite("/battle/player.png", 0, 200);
     }
 
@@ -258,7 +256,7 @@ public class BattleState implements GameState {
     // decluttering main loop
     private void handleMenuInput(ArrayList keys){
         boolean inputed = false;
-        if (keys.contains(KeyEvent.VK_RIGHT)){
+        if (keys.contains(DankButtons.INPUT_RIGHT)){
             if (this.item_selected > 1){
                 // this means its in the bottom row atm
                 this.item_selected++;
@@ -269,7 +267,7 @@ public class BattleState implements GameState {
                 if (this.item_selected > 1) this.item_selected = 1;
             }
             inputed = true;
-        } else if (keys.contains(KeyEvent.VK_LEFT)){
+        } else if (keys.contains(DankButtons.INPUT_LEFT)){
             // pretty much a copy and paste of above with some tweaks
             if (this.item_selected > 1){
                 // this means its in the bottom row atm
@@ -281,12 +279,12 @@ public class BattleState implements GameState {
                 if (this.item_selected < 0) this.item_selected = 0;
             }
             inputed = true;
-        } else if (keys.contains(KeyEvent.VK_DOWN)){
+        } else if (keys.contains(DankButtons.INPUT_DOWN)){
             // move the cursor down by adding 2
             this.item_selected += 2;
             if (this.item_selected > 3) this.item_selected = 3;
             inputed = true;
-        } else if (keys.contains(KeyEvent.VK_UP)){
+        } else if (keys.contains(DankButtons.INPUT_UP)){
             // move the cursor up by subtracing 2
             this.item_selected -= 2;
             if (this.item_selected < 0) this.item_selected = 0;
@@ -327,7 +325,7 @@ public class BattleState implements GameState {
                 this.framecounter += 1;
             }
             // check for input
-            if (keys.contains(KeyEvent.VK_Z)){
+            if (keys.contains(DankButtons.INPUT_ACTION)){
                 // clear the textbox
                 this.showfulltextbox = false;
                 // code for handling the initial textbox
@@ -386,7 +384,7 @@ public class BattleState implements GameState {
         } else {
             this.handleMenuInput(keys);
             // check to see if an option was selected
-            if (keys.contains(KeyEvent.VK_Z)) {
+            if (keys.contains(DankButtons.INPUT_ACTION)) {
                 switch (this.item_selected) {
                     case 0: // Atack button
                         // attempt do a normal attack
@@ -398,7 +396,7 @@ public class BattleState implements GameState {
                             // tell the game we did damage
                             this.doDamage = true;
                             // roll for a crit
-                            int critroll = Main.random.nextInt(10);
+                            int critroll = MailQuestJRE.random.nextInt(10);
                             if (critroll == 3){
                                 // we got a crit
                                 this.crit = true;
@@ -424,7 +422,7 @@ public class BattleState implements GameState {
                         // can we even flee in the first place?
                         if (this.can_flee) {
                             // generate a random number
-                            int num = Main.random.nextInt(17);
+                            int num = MailQuestJRE.random.nextInt(17);
                             if (num <= 5) {
                                 this.battleover = true;
                                 this.exit_to_overworld = true;
@@ -501,11 +499,11 @@ public class BattleState implements GameState {
             } else {
                 // apply damage
                 this.doDamage = true;
-                int critroll = Main.random.nextInt(34);
+                int critroll = MailQuestJRE.random.nextInt(34);
                 if (critroll ==  11){
                     // foe got a crit
                     this.crit = true;
-                    if (Main.debugging) System.err.println("Foe landed crit, originally was: " + foe_res);
+                    if (MailQuestJRE.debugging) System.err.println("Foe landed crit, originally was: " + foe_res);
                     foe_res = foe_res * 2;
                 }
                 this.damage_to_deal = foe_res;
@@ -597,8 +595,8 @@ public class BattleState implements GameState {
             this.slicer = new TextSlicer("You lost the battle...");
         } else {
             // generate how much money and exp the player gets
-            int exp = Main.random.nextInt(this.foe.getAtk()) + 1;
-            int money = Main.random.nextInt(this.foe.getDef()) + 1;
+            int exp = MailQuestJRE.random.nextInt(this.foe.getAtk()) + 1;
+            int money = MailQuestJRE.random.nextInt(this.foe.getDef()) + 1;
             this.slicer = new TextSlicer("You won! You got "+ Integer.toString(exp) + " exp and " + Integer.toString(money) + " money");
             // grant the player the money and experience points
             Player pobj = (Player) this.player;
@@ -614,7 +612,7 @@ public class BattleState implements GameState {
             // should we set a flag?
             if (this.set_flag_on_win){
                 // set the flag
-                Main.state_storage.put(this.flag_name, true);
+                MailQuestJRE.state_storage.put(this.flag_name, true);
             }
         }
         this.showfulltextbox = true;
@@ -707,14 +705,14 @@ public class BattleState implements GameState {
         // first, change overworld state
         OverworldState state = (OverworldState) Main.getState(GameStates.OVERWORLD.id);
         // get the player's last heal map
-        state.setMapToLoad(Main.player.get_lasthealmap());
+        state.setMapToLoad(MailQuestJRE.player.get_lasthealmap());
         // set the spawn point
         // -1 is the key to use the heal spawn point
         state.selectSpawnPoint(-1);
         // force reload map
         state.forceMapReload();
         // heal the player
-        Main.player.fully_heal();
+        MailQuestJRE.player.fully_heal();
     }
 
     // this is exclusively used for the level up
@@ -738,7 +736,7 @@ public class BattleState implements GameState {
             int rng = 0;
             if (this.stat_wheel_spin){
                 // generate a random number
-                rng = Main.random.nextInt(8) + 1;
+                rng = MailQuestJRE.random.nextInt(8) + 1;
                 // draw that to the screen
                 StatBoostWheel wheel = new StatBoostWheel(rng);
                 renderlist.add(wheel);
@@ -746,31 +744,31 @@ public class BattleState implements GameState {
             // process user input to select stat to boost
             if (this.framecounter == 0) {
                 if (!this.stat_wheel_spin) {
-                    if (keys.contains(KeyEvent.VK_DOWN)) {
+                    if (keys.contains(DankButtons.INPUT_DOWN)) {
                         // move selected item down
                         this.item_selected += 1;
                         this.framecounter = 10;
                         // bounds checking
                         if (this.item_selected > 3) this.item_selected = 0;
-                    } else if (keys.contains(KeyEvent.VK_UP)) {
+                    } else if (keys.contains(DankButtons.INPUT_UP)) {
                         // move selectted item up
                         this.item_selected -= 1;
                         this.framecounter = 10;
                         // bounds checking
                         if (this.item_selected < 0) this.item_selected = 3;
-                    } else if (keys.contains(KeyEvent.VK_Z)){
+                    } else if (keys.contains(DankButtons.INPUT_ACTION)){
                         // key pressed, switch to the wheel mode
                         this.stat_wheel_spin = true;
                         // add some frames
                         this.framecounter = 5;
                     }
                 } else {
-                    if (keys.contains(KeyEvent.VK_X)){
+                    if (keys.contains(DankButtons.INPUT_CANCEL)){
                         // cancel the wheel spin
                         this.stat_wheel_spin = false;
                         // add a couple of frames
                         this.framecounter = 5;
-                    } else if (keys.contains(KeyEvent.VK_Z)){
+                    } else if (keys.contains(DankButtons.INPUT_ACTION)){
                         String text = "got extra " + Integer.toString(rng) + " added to stat ";
                         // apply pre-generated stat boosts
                         pobj.addAtk(this.stat_adds[1]);
@@ -830,13 +828,13 @@ public class BattleState implements GameState {
                 pobj.increaseEXPRequirements();
                 // roll 4 stat increases
                 // HP
-                this.stat_adds[0] = Main.random.nextInt(10) + 2;
+                this.stat_adds[0] = MailQuestJRE.random.nextInt(10) + 2;
                 // ATK
-                this.stat_adds[1] = Main.random.nextInt(4) + 1;
+                this.stat_adds[1] = MailQuestJRE.random.nextInt(4) + 1;
                 // DEF
-                this.stat_adds[2] = Main.random.nextInt(4) + 1;
+                this.stat_adds[2] = MailQuestJRE.random.nextInt(4) + 1;
                 // Magic
-                this.stat_adds[3] = Main.random.nextInt(5) + 1;
+                this.stat_adds[3] = MailQuestJRE.random.nextInt(5) + 1;
                 // set the text to be level up text
                 this.slicer = new TextSlicer(pobj.getName() + " leveled up!");
                 // flip some flags around to show the full textbox, but not boot us

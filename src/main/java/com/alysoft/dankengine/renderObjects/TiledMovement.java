@@ -1,10 +1,11 @@
-package com.eziosoft.mailquestjre.renderObjects;
+package com.alysoft.dankengine.renderObjects;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
+import com.alysoft.dankengine.Main;
+import com.alysoft.dankengine.backends.base.GraphicsBackend;
+import com.alysoft.dankengine.renderer.DankColor;
+import com.alysoft.dankengine.renderer.DankGraphic;
+
 import java.io.IOException;
-import java.io.InputStream;
 
 public class TiledMovement implements DrawableObject {
 
@@ -13,7 +14,7 @@ public class TiledMovement implements DrawableObject {
     private int tiley = 0;
     private int counter = 0;
     // NEW: you can set a graphic instead of just being a red box
-    private BufferedImage graphic;
+    private DankGraphic graphic;
     private boolean useGraphics;
     // how many pixels into a tile we are
     private int subtiles_x = 0;
@@ -52,11 +53,7 @@ public class TiledMovement implements DrawableObject {
     public TiledMovement(String resource){
         // ok, we need to load the resource we want now
         try {
-            InputStream stream = TiledMovement.class.getResourceAsStream(resource);
-            // make imageio do its thing
-            this.graphic = ImageIO.read(stream);
-            // close the stream
-            stream.close();
+            this.graphic = Main.getFunctionalBackend().getEngineGraphicResource(resource);
         } catch (IOException e){
             // something has gone horribly wrong
             throw new RuntimeException(e);
@@ -83,7 +80,7 @@ public class TiledMovement implements DrawableObject {
     }
 
     @Override
-    public void drawObject(Graphics2D gfx) {
+    public void drawObject(GraphicsBackend gfx) {
         // because this is ran every frame, we can run a little bit of update logic here
         if (this.isMoving){
             // check to see if we're done moving
@@ -135,11 +132,10 @@ public class TiledMovement implements DrawableObject {
         }
         // regular drawing code goes here
         if (!this.useGraphics) {
-            gfx.setColor(Color.red);
-            gfx.fillRect((this.tilex * 25) + this.subtiles_x, (this.tiley * 25) + this.subtiles_y, 25, 25);
+            gfx.drawRectangleFilled((this.tilex * 25) + this.subtiles_x, (this.tiley * 25) + this.subtiles_y, 25, 25, DankColor.red);
         } else {
             // draw the sprite we have loaded
-            gfx.drawImage(this.graphic, (this.tilex * 25) + this.subtiles_x, (this.tiley * 25) + this.subtiles_y, null);
+            this.graphic.drawGraphic((this.tilex * 25) + this.subtiles_x, (this.tiley * 25) + this.subtiles_y, gfx);
         }
     }
 }

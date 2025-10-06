@@ -1,8 +1,11 @@
 package com.eziosoft.mailquestjre.renderObjects;
 
-import java.awt.*;
+import com.alysoft.dankengine.backends.base.GraphicsBackend;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.renderer.DankColor;
+import com.alysoft.dankengine.renderer.DankFont;
 
-public class LevelUpStatDisplay implements DrawableObject{
+public class LevelUpStatDisplay implements DrawableObject {
     private final int hp;
     private final int atk;
     private final int def;
@@ -29,27 +32,23 @@ public class LevelUpStatDisplay implements DrawableObject{
 
 
     @Override
-    public void drawObject(Graphics2D gfx) {
+    public void drawObject(GraphicsBackend gfx) {
         // set color to pink
-        gfx.setColor(Color.pink);
         // draw the outer box
-        gfx.fillRect(4, 4, 300, 200);
+        gfx.drawRectangleFilled(4, 4, 300, 200, DankColor.pink);
         // switch color and draw inner box
-        gfx.setColor(Color.lightGray);
-        gfx.fillRect(12, 12, 284, 184);
+        gfx.drawRectangleFilled(12, 12, 284, 184, DankColor.lightGray);
         // set font and change color
-        gfx.setColor(Color.black);
-        gfx.setFont(new Font("helvetica", Font.PLAIN, 27));
+        DankFont thefont = new DankFont("helvetica", 0, 27);
         // draw all the states
-        gfx.drawString("HP: " + this.hp + " + " + this.hp_add, 14, 34);
-        gfx.drawString("ATK: " + this.atk + " + " + this.atk_add, 14, 64);
-        gfx.drawString("DEF: " + this.def + " + " + this.def_add, 14, 94);
-        gfx.drawString("MAG: " + this.magic + " + " + this.magic_add, 14, 124);
+        gfx.drawTextSimple(14, 34, thefont, DankColor.black, "HP: " + this.hp + " + " + this.hp_add);
+        gfx.drawTextSimple(14, 64, thefont, DankColor.black, "ATK: " + this.atk + " + " + this.atk_add);
+        gfx.drawTextSimple(14, 94, thefont, DankColor.black, "DEF: " + this.def + " + " + this.def_add);
+        gfx.drawTextSimple(14, 124, thefont, DankColor.black, "MAG: " + this.magic + " + " + this.magic_add);
         // give player tip about picking stat to boost
-        gfx.drawString("Pick stat to give", 14, 154);
-        gfx.drawString("a boost to!", 14, 184);
+        gfx.drawTextSimple(14, 154, thefont, DankColor.black, "Pick stat to give");
+        gfx.drawTextSimple(14, 184, thefont, DankColor.black, "a boost to!");
         // draw an arrow
-        gfx.setColor(Color.green);
-        gfx.fillPolygon(new int[]{280, 280, 260}, new int[]{14 + (this.selected_item * 30), 34 + (this.selected_item * 30), 24 + (this.selected_item * 30)}, 3);
+        gfx.drawPolygonFilled(new int[]{280, 280, 260}, new int[]{14 + (this.selected_item * 30), 34 + (this.selected_item * 30), 24 + (this.selected_item * 30)}, 3, DankColor.green);
     }
 }

@@ -1,6 +1,4 @@
-package com.eziosoft.mailquestjre.stuff;
-
-import com.eziosoft.mailquestjre.Main;
+package com.alysoft.dankengine.utility;
 
 public class TextSlicer {
 
@@ -9,8 +7,10 @@ public class TextSlicer {
     private int counter = 0;
 
     public TextSlicer(String cont){
+        // TODO: enable registering of replacable strings
         // replace all instances of <player> with the player's actual name
-        this.content = cont.replaceAll("<player>", Main.player.getName());
+        //this.content = cont.replaceAll("<player>", Main.player.getName());
+        this.content = cont;
     }
 
     public String getText(){

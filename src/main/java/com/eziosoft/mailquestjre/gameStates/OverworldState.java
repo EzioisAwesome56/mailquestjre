@@ -1,26 +1,30 @@
 package com.eziosoft.mailquestjre.gameStates;
 
-import com.eziosoft.mailquestjre.Main;
+import com.alysoft.dankengine.Main;
+import com.alysoft.dankengine.backends.base.GraphicsBackend;
+import com.alysoft.dankengine.enums.MovementDirections;
+import com.alysoft.dankengine.gameStates.GameState;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.renderObjects.TextboxObject;
+import com.alysoft.dankengine.renderObjects.TiledMovement;
+import com.alysoft.dankengine.renderer.DankGraphic;
+import com.alysoft.dankengine.utility.DankButtons;
+import com.alysoft.dankengine.utility.MousePos;
+import com.alysoft.dankengine.utility.TextSlicer;
+import com.alysoft.dankengine.utility.TiledMapUtils;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.json.*;
 import com.eziosoft.mailquestjre.renderObjects.*;
 import com.eziosoft.mailquestjre.stuff.*;
 import com.eziosoft.mailquestjre.stuff.enums.EventTypes;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
-import com.eziosoft.mailquestjre.stuff.enums.MovementDirections;
 import com.eziosoft.mailquestjre.stuff.enums.WarpActivations;
-import org.apache.commons.io.IOUtils;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.List;
 
-public class OverworldState implements GameState{
+public class OverworldState implements GameState {
 
     // define objects that will always be present no matter what
     private final TiledMovement playergfx = new TiledMovement("/overworld/gfx/player_ow.png");
@@ -29,7 +33,7 @@ public class OverworldState implements GameState{
     // stuff for the loaded map goes here
     private String map_filename;
     private OverworldMap current_map;
-    private BufferedImage cached_map_bg;
+    private DankGraphic cached_map_bg;
     private SimpleImageRenderer maprenderer;
     // default to 0
     private int selected_spawn = 0;
@@ -139,11 +143,11 @@ public class OverworldState implements GameState{
                 this.hasmoved = false;
                 // sure, lets try one out i suppose
                 // generate a random number
-                int rand = Main.random.nextInt(100);
+                int rand = MailQuestJRE.random.nextInt(100);
                 if (rand < this.current_map.getWildChance()){
                     // new feature for debugging because oh my god
                     if (!this.debug_disableencounters) {
-                        if (Main.debugging) System.err.println("Battle triggered");
+                        if (MailQuestJRE.debugging) System.err.println("Battle triggered");
                         // run the code to setup a battle
                         this.rollWildEncounter();
                     }
@@ -152,15 +156,15 @@ public class OverworldState implements GameState{
         }
         // if controls arent locked, allow the player to move
         if (!this.lockControls && !this.playergfx.isMoving()){
-            if (keys.contains(KeyEvent.VK_RIGHT)) {
+            if (keys.contains(DankButtons.INPUT_RIGHT)) {
                 this.doMovementCollision(MovementDirections.RIGHT);
-            } else if (keys.contains(KeyEvent.VK_LEFT)) {
+            } else if (keys.contains(DankButtons.INPUT_LEFT)) {
                 this.doMovementCollision(MovementDirections.LEFT);
-            } else if (keys.contains(KeyEvent.VK_DOWN)){
+            } else if (keys.contains(DankButtons.INPUT_DOWN)){
                 this.doMovementCollision(MovementDirections.DOWN);
-            } else if (keys.contains(KeyEvent.VK_UP)){
+            } else if (keys.contains(DankButtons.INPUT_UP)){
                 this.doMovementCollision(MovementDirections.UP);
-            } else if (keys.contains(KeyEvent.VK_ENTER)){
+            } else if (keys.contains(DankButtons.INPUT_START)){
                 // lock controls
                 this.lockControls = true;
                 // set the menu flag
@@ -198,16 +202,13 @@ public class OverworldState implements GameState{
     make sure you have a valid filename set first though!
      */
     private void doInitialLoad(){
+        // TODO: update to use backend functions
         // first, we have to try and load whatever json file it wants us to load
         OverworldMap map;
         try {
-            InputStream stream = OverworldState.class.getResourceAsStream("/overworld/data/maps/" + this.map_filename + ".json");
-            // convert to string
-            String raw = IOUtils.toString(stream, StandardCharsets.UTF_8);
+            String raw = Main.getFunctionalBackend().getEngineTextResource("/overworld/data/maps/" + this.map_filename + ".json");
             // convert to object
-            map = Main.gson.fromJson(raw, OverworldMap.class);
-            // close the stream
-            stream.close();
+            map = MailQuestJRE.gson.fromJson(raw, OverworldMap.class);
         } catch (Exception e){
             // something broke
             throw new IllegalStateException("Error while trying to read map \""+ this.map_filename + "\"'s data", e);
@@ -217,14 +218,9 @@ public class OverworldState implements GameState{
         // we will now attempt to load the tileset for this map now
         MapTileSet tileset;
         try {
-            // try to open the file
-            InputStream stream = OverworldState.class.getResourceAsStream("/overworld/data/tileset/" + this.current_map.getTileset() + ".json");
-            // convert to string
-            String raw = IOUtils.toString(stream, StandardCharsets.UTF_8);
-            // close stream
-            stream.close();
+            String raw = Main.getFunctionalBackend().getEngineTextResource("/overworld/data/tileset/" + this.current_map.getTileset() + ".json");
             // make json convert to object
-            tileset = Main.gson.fromJson(raw, MapTileSet.class);
+            tileset = MailQuestJRE.gson.fromJson(raw, MapTileSet.class);
         } catch (Exception e){
             // just rethrow it
             throw new IllegalStateException("Error while trying to read tileset \"" + this.current_map.getTileset() + "\"'s data!", e);
@@ -296,22 +292,22 @@ public class OverworldState implements GameState{
         // then do movement shit
         // but first check to see if there are frames in the counter
         if (this.frame_counter == 0) {
-            if (keys.contains(KeyEvent.VK_X)) {
+            if (keys.contains(DankButtons.INPUT_CANCEL)) {
                 // disable the menu flag
                 this.isPauseMenu = false;
                 // and unlock player controls
                 this.lockControls = false;
-            } else if (keys.contains(KeyEvent.VK_DOWN)) {
+            } else if (keys.contains(DankButtons.INPUT_DOWN)) {
                 this.menu_item_selected += 1;
                 this.frame_counter = menu_movement_delay;
                 // bounds checking
                 if (this.menu_item_selected > 4) this.menu_item_selected = 4;
-            } else if (keys.contains(KeyEvent.VK_UP)) {
+            } else if (keys.contains(DankButtons.INPUT_UP)) {
                 this.menu_item_selected -= 1;
                 this.frame_counter = menu_movement_delay;
                 // more bounds checking
                 if (this.menu_item_selected < 0) this.menu_item_selected = 0;
-            } else if (keys.contains(KeyEvent.VK_Z)){
+            } else if (keys.contains(DankButtons.INPUT_ACTION)){
                 // do something based on what menu item is selected
                 switch (this.menu_item_selected){
                     case 0: // stats button
@@ -337,7 +333,7 @@ public class OverworldState implements GameState{
                 this.frame_counter = 10;
             }
             // TODO: stuff and things for actually making the menu items work
-            if (Main.debugging) DebugHelper.OverworldMenuDebug(keys);
+            if (MailQuestJRE.debugging) DebugHelper.OverworldMenuDebug(keys);
         } else {
             // subtract from the frame counter
             this.frame_counter--;
@@ -364,7 +360,7 @@ public class OverworldState implements GameState{
                 this.frame_counter -= 1;
             }
             // check to see if z is pressed
-            if (keys.contains(KeyEvent.VK_Z)){
+            if (keys.contains(DankButtons.INPUT_ACTION)){
                 // disable the textbox
                 this.isTextbox = false;
                 // add 6 frames to the framecounter
@@ -398,44 +394,41 @@ public class OverworldState implements GameState{
             this.cached_map_bg.flush();
         }
         // to ease on read calls, we will setup a cache of buffered images to use
-        HashMap<Integer, BufferedImage> graphicscache = new HashMap<>();
+        HashMap<Integer, DankGraphic> graphicscache = new HashMap<>();
         // setup other variables to use
         int xpos = 0;
         int ypos = 0;
         // create the image to draw onto
-        this.cached_map_bg = new BufferedImage(500, 500, BufferedImage.TYPE_4BYTE_ABGR);
+        this.cached_map_bg = Main.getFunctionalBackend().generateNewGraphic(500, 500, true);
         // then, get the graphics from that
-        Graphics2D gfx = this.cached_map_bg.createGraphics();
+        GraphicsBackend gfx = this.cached_map_bg.getDrawable();
         // time to do the things
         for (int y = 0; y < 20; y++){
             for (int x = 0; x < 20; x++){
                 // get the current tile in the tilemap matrix
                 int tile = this.tile_map[y][x];
                 // load the graphics if need be
-                BufferedImage todraw;
+                DankGraphic todraw;
                 if (graphicscache.containsKey(tile)){
                     todraw = graphicscache.get(tile);
                 } else {
                     // ok, we have to load it, damn
                     // get the stream of the resource in question
-                    if (Main.debugging) System.out.println("Current Tile ID: " + tile);
+                    if (MailQuestJRE.debugging) Main.getFunctionalBackend().logInfo("Current Tile ID: " + tile);
                     String resourcename = "/overworld/gfx/" + this.tileset.getBasefolder() + "/" + this.tileset.getTiles().get(tile).getGraphics() + ".png";
-                    InputStream stream = OverworldState.class.getResourceAsStream(resourcename);
                     // attempt to load it
                     try {
-                        todraw = ImageIO.read(stream);
-                        // close the stream
-                        stream.close();
+                        todraw = Main.getFunctionalBackend().getEngineGraphicResource(resourcename);
                     } catch (IOException e){
                         // something broke, just give up
                         throw new IllegalStateException("Error trying to load tile graphic " + this.tileset.getTiles().get(tile).getGraphics(), e);
                     }
                     // next, cache it for later
                     graphicscache.put(tile, todraw);
-                    if (Main.debugging) System.err.println("Loaded tile graphics: " + this.tileset.getTiles().get(tile).getGraphics() + ".png");
+                    if (MailQuestJRE.debugging) Main.getFunctionalBackend().logError("Loaded tile graphics: " + this.tileset.getTiles().get(tile).getGraphics() + ".png");
                 }
                 // now, we can draw the tile onto the map
-                gfx.drawImage(todraw, xpos, ypos, null);
+                todraw.drawGraphic(xpos, ypos, gfx);
                 // add 25 to our xpos
                 xpos += 25;
             }
@@ -445,9 +438,9 @@ public class OverworldState implements GameState{
             ypos += 25;
         }
         // we're done drawing now, time to clean up
-        gfx.dispose();
+        gfx.cleanupGraphics();
         // get rid of all the buffered images
-        for (Map.Entry<Integer, BufferedImage> ent : graphicscache.entrySet()){
+        for (Map.Entry<Integer, DankGraphic> ent : graphicscache.entrySet()){
             ent.getValue().flush();
         }
         // delete the list
@@ -517,7 +510,7 @@ public class OverworldState implements GameState{
         // get the size of the encounter table
         int size = this.current_map.getEncounters().size();
         // generate a number based on that
-        int rand = Main.random.nextInt(size);
+        int rand = MailQuestJRE.random.nextInt(size);
         // get the table entry
         EncounterTableEntry ent = this.current_map.getEncounters().get(rand);
         // get the battle state
@@ -551,7 +544,7 @@ public class OverworldState implements GameState{
             this.preformEvent(event);
         } else if (act == 1){
             // check to see if the z button has been pressed or not
-            if (keys.contains(KeyEvent.VK_Z)){
+            if (keys.contains(DankButtons.INPUT_ACTION)){
                 // ok, the button has been pressed. now we need to do shit
                 this.preformEvent(event);
             } else {
@@ -570,9 +563,9 @@ public class OverworldState implements GameState{
         // is this event disabled by a flag?
         if (event.getFlaguse() == 0){
             // check and see if the flag is present in the state storage
-            if (Main.state_storage.containsKey(fname)){
+            if (MailQuestJRE.state_storage.containsKey(fname)){
                 // check to make sure it is set to true
-                if ((boolean) Main.state_storage.get(fname)){
+                if ((boolean) MailQuestJRE.state_storage.get(fname)){
                     // this event's flag is present and is true, bail
                     return;
                 }
@@ -580,9 +573,9 @@ public class OverworldState implements GameState{
         } else if (event.getFlaguse() == 1) {
             // this event is ENABLED by a flag
             // do the inverse of above
-            if (Main.state_storage.containsKey(fname)) {
+            if (MailQuestJRE.state_storage.containsKey(fname)) {
                 // check to make sure it is set to true
-                if (!(boolean) Main.state_storage.get(fname)) {
+                if (!(boolean) MailQuestJRE.state_storage.get(fname)) {
                     // this event's flag is present and is false, bail
                     return;
                 }
@@ -607,7 +600,7 @@ public class OverworldState implements GameState{
             int id = Integer.parseInt(event.getEventtext());
             // run the predef function
             PredefinedFunctions.runPredef(id);
-            if (Main.debugging) System.out.println("Returned from predef call");
+            if (MailQuestJRE.debugging) Main.getFunctionalBackend().logInfo("Returned from predef call");
         } else if (type == EventTypes.SCRIPT.id){
             // run the script provided
             MapScriptParser parser = new MapScriptParser(event.getEventtext());
@@ -632,26 +625,26 @@ public class OverworldState implements GameState{
         // check to see what activation type it is
         if (warp.getActivation_type() == WarpActivations.RIGHT.id){
             // did the player press right?
-            if (keys.contains(KeyEvent.VK_RIGHT)){
+            if (keys.contains(DankButtons.INPUT_RIGHT)){
                 // perform the warp
                 this.doWarp(warp);
             }
         } else if (warp.getActivation_type() == WarpActivations.LEFT.id){
             // is left pressed?
-            if (keys.contains(KeyEvent.VK_LEFT)){
+            if (keys.contains(DankButtons.INPUT_LEFT)){
                 this.doWarp(warp);
             }
         } else if (warp.getActivation_type() == WarpActivations.UP.id){
-            if (keys.contains(KeyEvent.VK_UP)){
+            if (keys.contains(DankButtons.INPUT_UP)){
                 this.doWarp(warp);
             }
         } else if (warp.getActivation_type() == WarpActivations.DOWN.id){
-            if (keys.contains(KeyEvent.VK_DOWN)){
+            if (keys.contains(DankButtons.INPUT_DOWN)){
                 this.doWarp(warp);
             }
         } else if (warp.getActivation_type() == WarpActivations.BUTTON.id){
             // check to see if the player has pushed the action button while standing on a warp
-            if (keys.contains(KeyEvent.VK_Z)){
+            if (keys.contains(DankButtons.INPUT_ACTION)){
                 // do the warp
                 this.doWarp(warp);
             }
@@ -673,10 +666,10 @@ public class OverworldState implements GameState{
     // spooky debug function that shouldnt exist but oh my god i am going insane
     @Deprecated
     public void setEncounterState(boolean state){
-        if (Main.debugging){
+        if (MailQuestJRE.debugging){
             // toggle that shit
             this.debug_disableencounters = state;
-            System.err.println("Encounters are now set to: " + this.debug_disableencounters);
+            Main.getFunctionalBackend().logError("Encounters are now set to: " + this.debug_disableencounters);
         }
     }
 }

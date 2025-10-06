@@ -1,6 +1,6 @@
 package com.eziosoft.mailquestjre.json;
 
-import com.eziosoft.mailquestjre.Main;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.stuff.SaveFileUtils;
 
 import java.nio.charset.StandardCharsets;
@@ -16,7 +16,7 @@ public class SaveFileMetaFile {
 
     public SaveFileMetaFile(SaveFileData save){
         // convert the object to a base64 string
-        this.save_file = Base64.getEncoder().encodeToString(Main.gson.toJson(save).getBytes(StandardCharsets.UTF_8));
+        this.save_file = Base64.getEncoder().encodeToString(MailQuestJRE.gson.toJson(save).getBytes(StandardCharsets.UTF_8));
         // calculate the checksum of the data
         this.checksum = SaveFileUtils.CalculateChecksum(this.save_file);
     }

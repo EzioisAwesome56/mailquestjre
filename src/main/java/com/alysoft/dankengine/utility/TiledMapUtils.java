@@ -1,6 +1,6 @@
-package com.eziosoft.mailquestjre.stuff;
+package com.alysoft.dankengine.utility;
 
-import com.eziosoft.mailquestjre.Main;
+import com.alysoft.dankengine.Main;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.w3c.dom.Document;
@@ -17,7 +17,7 @@ public class TiledMapUtils {
     // decluttering the main overworld state class
     public static int[][] loadTileMap(String filename) throws Exception {
         // first, we need to try to open the file as a stream
-        InputStream stream = TiledMapUtils.class.getResourceAsStream("/overworld/data/maps/" + filename + ".tmx");
+        InputStream stream = Main.getFunctionalBackend().getEngineResource("/overworld/data/maps/" + filename + ".tmx");
         // ok, now we have to attempt to parse the XML
         /*
         originally, this was supposed to use jaxb. that worked great!
@@ -44,8 +44,8 @@ public class TiledMapUtils {
         // next, data element's contents from the layer element
         String garbage = argh.item(0).getFirstChild().getNextSibling().getTextContent();
         if (Main.debugging){
-            System.out.println("Obtained the following from XML Parsing:");
-            System.out.println(garbage);
+            Main.getFunctionalBackend().logInfo("Obtained the following from XML Parsing:");
+            Main.getFunctionalBackend().logInfo(garbage);
         }
         // ok, we now have the data we want. i hate xml
         // now we can deal with the CSV data. Cringe

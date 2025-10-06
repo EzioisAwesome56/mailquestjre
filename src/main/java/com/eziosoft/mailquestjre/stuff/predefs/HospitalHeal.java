@@ -1,19 +1,19 @@
 package com.eziosoft.mailquestjre.stuff.predefs;
 
-import com.eziosoft.mailquestjre.Main;
+import com.alysoft.dankengine.Main;
+import com.alysoft.dankengine.utility.TextSlicer;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.gameStates.OverworldState;
 import com.eziosoft.mailquestjre.stuff.PredefinedFunctions;
-import com.eziosoft.mailquestjre.stuff.TextSlicer;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
 
-import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
 
 public class HospitalHeal extends PredefinedFunctions {
 
     @Override
     public void doPredef() {
-        if (Main.debugging) System.out.println("Now running healing predef function!");
+        if (MailQuestJRE.debugging) Main.logInfo("Now running healing predef function!");
         // get the overworld game state
         OverworldState state = (OverworldState) Main.getState(GameStates.OVERWORLD.id);
         // get the actual map that we need from the current map
@@ -33,9 +33,9 @@ public class HospitalHeal extends PredefinedFunctions {
         // ok, now we have the map fillename, split it
         String[] split = cur_map.split("_");
         // update map to the filename after the _
-        Main.player.set_lasthealmap(split[1]);
+        MailQuestJRE.player.set_lasthealmap(split[1]);
         // now we can actually heal the player
-        Main.player.fully_heal();
+        MailQuestJRE.player.fully_heal();
         // ok, now we should display a textbox
         // too lazy to actually do it so we're going to use more reflection shit
         // yay for reflection

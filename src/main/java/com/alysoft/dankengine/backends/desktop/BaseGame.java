@@ -1,4 +1,4 @@
-package com.eziosoft.mailquestjre;
+package com.alysoft.dankengine.backends.desktop;
 
 import javax.swing.*;
 import java.awt.*;

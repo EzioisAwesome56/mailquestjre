@@ -1,14 +1,15 @@
 package com.eziosoft.mailquestjre.renderObjects;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.InputStream;
+import com.alysoft.dankengine.Main;
+import com.alysoft.dankengine.backends.base.GraphicsBackend;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.renderer.DankColor;
+import com.alysoft.dankengine.renderer.DankGraphic;
 
 public class BattleSprite implements DrawableObject {
 
     // setup our cached information here
-    private BufferedImage sprite;
+    private DankGraphic sprite;
     private int xpos;
     private int ypos;
 
@@ -18,8 +19,7 @@ public class BattleSprite implements DrawableObject {
         this.ypos = y;
         // attempt to aquire the sprite from resources
         try {
-            InputStream stream = BattleSprite.class.getResourceAsStream(resource);
-            this.sprite = ImageIO.read(stream);
+            this.sprite = Main.getFunctionalBackend().getEngineGraphicResource(resource);
         } catch (Exception e){
             System.err.println("Something has gone horribly wrong!");
             e.printStackTrace();
@@ -28,13 +28,11 @@ public class BattleSprite implements DrawableObject {
     }
 
     @Override
-    public void drawObject(Graphics2D gfx) {
-        // TODO: replace this with actual code
+    public void drawObject(GraphicsBackend gfx) {
         if (this.sprite != null) {
-            gfx.drawImage(this.sprite, this.xpos, this.ypos, null);
+            this.sprite.drawGraphic(this.xpos, this.ypos, gfx);
         } else {
-            gfx.setColor(Color.red);
-            gfx.fillRect(this.xpos, this.ypos, 200, 200);
+            gfx.drawRectangleFilled(this.xpos, this.ypos, 200, 200, DankColor.red);
         }
     }
 }

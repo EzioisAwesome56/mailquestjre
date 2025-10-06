@@ -1,20 +1,20 @@
 package com.eziosoft.mailquestjre.renderObjects;
 
-import java.awt.*;
-import java.awt.font.FontRenderContext;
-import java.awt.font.LineBreakMeasurer;
-import java.awt.font.TextAttribute;
-import java.awt.font.TextLayout;
+import com.alysoft.dankengine.backends.base.GraphicsBackend;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.renderer.DankColor;
+import com.alysoft.dankengine.renderer.DankFont;
+
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.Hashtable;
 
-public class BattleTextbox implements DrawableObject{
+public class BattleTextbox implements DrawableObject {
     // line break magic was borrowed from a very old oracle JDK example
     // see https://docs.oracle.com/javase/tutorial/displayCode.html?code=https://docs.oracle.com/javase/tutorial/2d/text/examples/LineBreakSample.java
     // and also https://docs.oracle.com/javase/tutorial/2d/text/drawmulstring.html
 
     private AttributedString content;
+    private String content_raw;
     private boolean drawArrow = false;
     private boolean split_mode = false;
     // option selection things
@@ -24,13 +24,10 @@ public class BattleTextbox implements DrawableObject{
 
     public BattleTextbox(String text){
         // give this to the attributed string
-        this.content = this.makeString(text);
+        this.content_raw = text;
     }
-    private AttributedString makeString(String text){
-        // we apparently need a hashmap for some of this shit
-        Hashtable<TextAttribute, Object> map = new Hashtable<>();
-        map.put(TextAttribute.FONT, new Font("helvetica", Font.PLAIN, 27));
-        return new AttributedString(text, map);
+    private AttributedString makeString(String text, GraphicsBackend gfx){
+        return gfx.makeAttributeString(text, new DankFont("helvetica", 0, 27));
     }
 
     public void setArrowState(boolean state){
@@ -51,7 +48,8 @@ public class BattleTextbox implements DrawableObject{
     }
 
     @Override
-    public void drawObject(Graphics2D gfx) {
+    public void drawObject(GraphicsBackend gfx) {
+        this.content = this.makeString(this.content_raw, gfx);
         if (this.split_mode){
             this.drawSplitMode(gfx);
         } else {
@@ -61,14 +59,12 @@ public class BattleTextbox implements DrawableObject{
 
     // break the code out to have easier to manage chunks
     // non-split mode
-    private void drawRegularMode(Graphics2D gfx){
+    private void drawRegularMode(GraphicsBackend gfx){
         // set color for outer box
-        gfx.setColor(Color.pink);
         // draw a rectangle that is the whole width but only 200px hight
-        gfx.fillRect(0, 400, 500, 100);
+        gfx.drawRectangleFilled(0, 400, 500, 100, DankColor.pink);
         // draw another one
-        gfx.setColor(Color.lightGray);
-        gfx.fillRect(8, 408, 484, 84);
+        gfx.drawRectangleFilled(8, 408, 484, 84, DankColor.lightGray);
         /* HOTFIX: sometimes this needs to be empty
             so i added a new flag to allow it to be empty if need be
          */
@@ -79,33 +75,30 @@ public class BattleTextbox implements DrawableObject{
             //gfx.drawString(this.text, 10, 333);
             // check if we need to draw an arrow or not
             if (this.drawArrow) {
-                gfx.setColor(Color.green);
-                gfx.fillPolygon(new int[]{470, 490, 480}, new int[]{470, 470, 490}, 3);
+                gfx.drawPolygonFilled(new int[]{470, 490, 480}, new int[]{470, 470, 490}, 3, DankColor.green);
             }
         }
     }
     // split mode
-    private void drawSplitMode(Graphics2D gfx){
+    private void drawSplitMode(GraphicsBackend gfx){
         // here, we need to draw two boxes.
         // but we can cheat and draw one long box first
-        gfx.setColor(Color.pink);
-        gfx.fillRect(0, 400, 500, 100);
+        gfx.drawRectangleFilled(0, 400, 500, 100, DankColor.pink);
         // next, draw the smaller one on the right side
-        gfx.setColor(Color.LIGHT_GRAY);
-        gfx.fillRect(308, 408, 184, 84);
+        gfx.drawRectangleFilled(308, 408, 184, 84, DankColor.lightGray);
         // draw larger rectangle
-        gfx.fillRect(8, 408, 284, 84);
+        gfx.drawRectangleFilled(8, 408, 284, 84, DankColor.lightGray);
         // draw the text to the screen
         this.drawLineBrokenText(gfx, 180);
         // now we need to draw the options on the right side
         // color should still be black from drawLineBrokenText
-        gfx.setFont(new Font("helvetica", Font.PLAIN, 23));
+        DankFont thefont = new DankFont("helvetica", 0, 23);
         // draw options
         // attack, magic, item, run
-        gfx.drawString("Attack", 330, 433);
-        gfx.drawString("Magic", 420, 433);
-        gfx.drawString("Item", 330, 473);
-        gfx.drawString("Run", 420, 473);
+        gfx.drawTextSimple(330, 433, thefont, DankColor.black, "Attack");
+        gfx.drawTextSimple(420, 433, thefont, DankColor.black, "Magic");
+        gfx.drawTextSimple(330, 473, thefont, DankColor.black, "Item");
+        gfx.drawTextSimple(420, 473, thefont, DankColor.black, "Run");
         // now, we need to draw the selection arrow
         // to do that, we need to do stupid maths
         int x = 0;
@@ -117,36 +110,21 @@ public class BattleTextbox implements DrawableObject{
             y += 40;
         }
         // change color
-        gfx.setColor(Color.green);
         // draw arrow
-        gfx.fillPolygon(new int[]{315 + x, 315 + x, 330 + x}, new int[]{410 + y, 436 + y, 423 + y}, 3);
+        gfx.drawPolygonFilled(new int[]{315 + x, 315 + x, 330 + x}, new int[]{410 + y, 436 + y, 423 + y}, 3, DankColor.green);
     }
 
     // draw stupid cringe text
-    private void drawLineBrokenText(Graphics2D gfx, int width){
-        gfx.setColor(Color.black);
+    private void drawLineBrokenText(GraphicsBackend gfx, int width){
+        gfx.setColor(DankColor.black);
         // setup the linebreaker thing
         AttributedCharacterIterator shit = this.content.getIterator();
-        int textstart = shit.getBeginIndex();
-        int textend = shit.getEndIndex();
-        FontRenderContext frc = gfx.getFontRenderContext();
-        LineBreakMeasurer measurer = new LineBreakMeasurer(shit, frc);
-        // set the measurer to the start
-        measurer.setPosition(textstart);
         // we want to break on 480 pixel bounds (2 pixels from the edge of each side
         int breakwidth = width;
         // base y pos
         float ypos = 433;
         // xpos for simplicity
         int xpos = 10;
-        // draw loop
-        while (measurer.getPosition() < textend){
-            TextLayout layout = measurer.nextLayout(breakwidth);
-            // draw it
-            layout.draw(gfx, xpos, ypos);
-            // add to the y coord
-            // the oracle example did not work so this is a thug'd solution
-            ypos += (float) layout.getBounds().getHeight();
-        }
+        gfx.drawTextAdvanced(xpos, ypos, shit, breakwidth);
     }
 }

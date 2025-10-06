@@ -1,6 +1,7 @@
 package com.eziosoft.mailquestjre.stuff;
 
-import com.eziosoft.mailquestjre.Main;
+import com.alysoft.dankengine.Main;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.gameStates.OverworldState;
 import com.eziosoft.mailquestjre.json.SaveFileData;
 import com.eziosoft.mailquestjre.json.SaveFileMetaFile;
@@ -41,7 +42,7 @@ public class SaveFileUtils {
             throw new RuntimeException("Error while trying to read save file!", e);
         }
         // then, use gson to convert to an object
-        SaveFileMetaFile thefile = Main.gson.fromJson(content, SaveFileMetaFile.class);
+        SaveFileMetaFile thefile = MailQuestJRE.gson.fromJson(content, SaveFileMetaFile.class);
         // next, we need to validate the data
         boolean iscorrupt = validateSaveFile(thefile.getSave_file(), thefile.getChecksum());
         if (!iscorrupt){
@@ -50,12 +51,12 @@ public class SaveFileUtils {
         // next, we need to decode the base64 into a json string
         String decoded = new String(Base64.getDecoder().decode(thefile.getSave_file()), StandardCharsets.UTF_8);
         // convert this to a save File Object
-        SaveFileData data = Main.gson.fromJson(decoded, SaveFileData.class);
+        SaveFileData data = MailQuestJRE.gson.fromJson(decoded, SaveFileData.class);
         // TODO: at some point, there may be new save  file formats. Check the version and deal with it as needed
         // then, we can load all the values
         // load our player
-        Main.player = data.getPlayer();
-        Main.state_storage = data.getFlags();
+        MailQuestJRE.player = data.getPlayer();
+        MailQuestJRE.state_storage = data.getFlags();
         // tell the overworld state to load the current player map
         // but first, we need to get the object for it
         OverworldState overworld = (OverworldState) Main.getState(GameStates.OVERWORLD.id);
@@ -89,12 +90,8 @@ public class SaveFileUtils {
 
     // get the directory the save file should be in
     private static File getSaveFileFile(boolean samedir){
-        if (samedir){
-            return new File(save_file_name);
-        } else {
-            // TODO: this. handle the different user directories depending on the OS
-            throw new IllegalStateException("This feature does not work yet! scammed!");
-        }
+        // we will ignore the flag for now, it doesnt matter with the new engine
+        return Main.getFunctionalBackend().getExternalFile(save_file_name);
     }
 
     // call this to delete your save file
@@ -123,18 +120,19 @@ public class SaveFileUtils {
         SaveFileData thedata = new SaveFileData();
         // store our data in it
         thedata.setVersion(save_version);
-        thedata.setFlags(Main.state_storage);
-        thedata.setPlayer(Main.player);
+        thedata.setFlags(MailQuestJRE.state_storage);
+        thedata.setPlayer(MailQuestJRE.player);
         thedata.setX(x);
         thedata.setY(y);
         thedata.setCurrent_map(currentmap);
         // create a new save file meta object for actually saving the file in
         SaveFileMetaFile tosave = new SaveFileMetaFile(thedata);
         // convert to json
-        String json = Main.gson.toJson(tosave);
+        String json = MailQuestJRE.gson.toJson(tosave);
         // write to the file
         File writable = getSaveFileFile(true);
         try {
+            // TODO: replace with backend functions
             // make output stream
             FileOutputStream stream = new FileOutputStream(writable);
             IOUtils.write(json.getBytes(StandardCharsets.UTF_8), stream);

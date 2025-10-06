@@ -1,8 +1,10 @@
 package com.eziosoft.mailquestjre.renderObjects;
 
-import java.awt.*;
-
-public class SimpleTextRender implements DrawableObject{
+import com.alysoft.dankengine.backends.base.GraphicsBackend;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.renderer.DankColor;
+import com.alysoft.dankengine.renderer.DankFont;
+public class SimpleTextRender implements DrawableObject {
     // stuff for later
     private String content;
     private int x;
@@ -19,11 +21,9 @@ public class SimpleTextRender implements DrawableObject{
 
 
     @Override
-    public void drawObject(Graphics2D gfx) {
+    public void drawObject(GraphicsBackend gfx) {
         // set graphics2d font and color
-        gfx.setColor(Color.black);
-        gfx.setFont(new Font("helvetica", Font.PLAIN, 27));
         // draw content
-        gfx.drawString(this.content, this.x, this.y);
+        gfx.drawTextSimple(this.x, this.y, new DankFont("helvetica", 0, 27), DankColor.black, this.content);
     }
 }

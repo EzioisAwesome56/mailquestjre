@@ -1,20 +1,22 @@
 package com.eziosoft.mailquestjre.gameStates;
 
-import com.eziosoft.mailquestjre.Main;
-import com.eziosoft.mailquestjre.renderObjects.DrawableObject;
+import com.alysoft.dankengine.Main;
+import com.alysoft.dankengine.gameStates.GameState;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.renderObjects.TextboxObject;
+import com.alysoft.dankengine.utility.DankButtons;
+import com.alysoft.dankengine.utility.MousePos;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.renderObjects.ItemMenuListRenderer;
 import com.eziosoft.mailquestjre.renderObjects.ItemMenuTabRenderer;
-import com.eziosoft.mailquestjre.renderObjects.TextboxObject;
 import com.eziosoft.mailquestjre.stuff.ItemMenuListItem;
-import com.eziosoft.mailquestjre.stuff.MousePos;
-import com.eziosoft.mailquestjre.stuff.TextSlicer;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
 import com.eziosoft.mailquestjre.stuff.enums.PlayerWeapons;
+import com.alysoft.dankengine.utility.TextSlicer;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
-public class ItemMenuState implements GameState{
+public class ItemMenuState implements GameState {
     /*
     tab ids:
     0 -> items
@@ -68,7 +70,7 @@ public class ItemMenuState implements GameState{
                 // update arrow state
                 txt.setArrowState(this.show_arrow);
                 // get rid of it if required
-                if (keys.contains(KeyEvent.VK_Z)) {
+                if (keys.contains(DankButtons.INPUT_ACTION)) {
                     // disable textbox flag
                     this.show_textbox = false;
                     // add like 6 frames to the counter
@@ -82,21 +84,21 @@ public class ItemMenuState implements GameState{
             if (this.framecounter == 0) {
                 // only parse left and right inputs if the tab's menu is not drawn
                 if (!this.draw_tab_menu) {
-                    if (keys.contains(KeyEvent.VK_RIGHT)) {
+                    if (keys.contains(DankButtons.INPUT_RIGHT)) {
                         // move tab right
                         this.current_tab++;
                         // bounds checking
                         if (this.current_tab > 2) this.current_tab = 2;
                         // put 10 frames on the counter to help prevent instant movement
                         this.framecounter = 10;
-                    } else if (keys.contains(KeyEvent.VK_LEFT)) {
+                    } else if (keys.contains(DankButtons.INPUT_LEFT)) {
                         // move tab selection left
                         this.current_tab -= 1;
                         // bounds checking
                         if (this.current_tab < 0) this.current_tab = 0;
                         // put some frames on the counter
                         this.framecounter = 10;
-                    } else if (keys.contains(KeyEvent.VK_Z)) {
+                    } else if (keys.contains(DankButtons.INPUT_ACTION)) {
                         // switch to the menu mode
                         this.draw_tab_menu = true;
                         // toss up some frames
@@ -105,7 +107,7 @@ public class ItemMenuState implements GameState{
                         this.max_item = 0;
                         // also reset current item
                         this.selected_item = 0;
-                    } else if (keys.contains(KeyEvent.VK_X)) {
+                    } else if (keys.contains(DankButtons.INPUT_CANCEL)) {
                         if (this.return_state == null) {
                             throw new IllegalStateException("No return state was provided!");
                         }
@@ -116,26 +118,26 @@ public class ItemMenuState implements GameState{
                     }
                 } else {
                     // processing for when a tab menu is drawn
-                    if (keys.contains(KeyEvent.VK_X)) {
+                    if (keys.contains(DankButtons.INPUT_CANCEL)) {
                         // exit the menu and go back to tab mode
                         this.draw_tab_menu = false;
                         // put 10 frames on the counter
                         this.framecounter = 10;
-                    } else if (keys.contains(KeyEvent.VK_DOWN)) {
+                    } else if (keys.contains(DankButtons.INPUT_DOWN)) {
                         // move selection down
                         this.selected_item += 1;
                         // put frames on the counter
                         this.framecounter = 10;
                         // bounds checking
                         if (this.selected_item > (this.max_item - 1)) this.selected_item = (this.max_item - 1);
-                    } else if (keys.contains(KeyEvent.VK_UP)) {
+                    } else if (keys.contains(DankButtons.INPUT_UP)) {
                         // move selection up
                         this.selected_item -= 1;
                         // toss some frames up
                         this.framecounter = 10;
                         // bounds checking
                         if (this.selected_item < 0) this.selected_item = 0;
-                    } else if (keys.contains(KeyEvent.VK_Z)) {
+                    } else if (keys.contains(DankButtons.INPUT_ACTION)) {
                         // figure out what we need to do and do it
                         this.handleTabMenuSelection();
                         // put some frames on the counter
@@ -162,10 +164,10 @@ public class ItemMenuState implements GameState{
             // make new list to hold weapons
             ArrayList<ItemMenuListItem> list = new ArrayList<>();
             // add all of our current weapons to it
-            for (PlayerWeapons w : Main.player.getUnlocked_weapons()){
+            for (PlayerWeapons w : MailQuestJRE.player.getUnlocked_weapons()){
                 // check if it is in use
                 boolean inuse = false;
-                if (Main.player.getWeapon() == w) inuse = true;
+                if (MailQuestJRE.player.getWeapon() == w) inuse = true;
                 list.add(new ItemMenuListItem(w, inuse));
             }
             // create a new renderer with this  array list
@@ -192,11 +194,11 @@ public class ItemMenuState implements GameState{
             // create new list
             ArrayList<ItemMenuListItem> list = new ArrayList<>();
             // check if player has any key items even
-            if (Main.player.getKeyitems().isEmpty()){
+            if (MailQuestJRE.player.getKeyitems().isEmpty()){
                 list.add(new ItemMenuListItem("You have no Key Items"));
             } else {
                 // copy all key items to new list
-                for (String s : Main.player.getKeyitems()){
+                for (String s : MailQuestJRE.player.getKeyitems()){
                     list.add(new ItemMenuListItem(s));
                 }
             }
@@ -221,11 +223,11 @@ public class ItemMenuState implements GameState{
         if (this.current_tab == 1){
             // weapons tab
             // get selected weapon
-            PlayerWeapons wep = Main.player.getUnlocked_weapons().get(this.selected_item);
+            PlayerWeapons wep = MailQuestJRE.player.getUnlocked_weapons().get(this.selected_item);
             // is it not already equipped?
-            if (Main.player.getWeapon() != wep){
+            if (MailQuestJRE.player.getWeapon() != wep){
                 // change equipped weapon to what is selected
-                Main.player.equipNewWeapon(this.selected_item);
+                MailQuestJRE.player.equipNewWeapon(this.selected_item);
             }
             // and we're done
         } else if (this.current_tab == 2){
@@ -233,7 +235,7 @@ public class ItemMenuState implements GameState{
             // HOTFIX: not having any items causes a crash; fix that shit
             String tmp;
             try {
-                tmp = Main.keyitemtext.getFlavorText(Main.player.getKeyitems().get(this.selected_item));
+                tmp = MailQuestJRE.keyitemtext.getFlavorText(MailQuestJRE.player.getKeyitems().get(this.selected_item));
             } catch (IndexOutOfBoundsException e){
                 // the exception doesnt actually matter, but we will ignore it anyway
                 tmp = "That is not a valid item!";

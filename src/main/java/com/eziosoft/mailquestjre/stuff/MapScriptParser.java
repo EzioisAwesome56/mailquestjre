@@ -1,15 +1,13 @@
 package com.eziosoft.mailquestjre.stuff;
 
-import com.eziosoft.mailquestjre.Main;
+import com.alysoft.dankengine.Main;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.gameStates.BattleState;
 import com.eziosoft.mailquestjre.gameStates.OverworldState;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
 import com.eziosoft.mailquestjre.stuff.enums.PlayerWeapons;
-import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,11 +35,7 @@ public class MapScriptParser {
         // attempt to read in the script from resources
         String temp;
         try {
-            InputStream stream = MapScriptParser.class.getResourceAsStream("/overworld/scripts/" + scriptname + ".des");
-            // use ioutils to read it
-            temp = IOUtils.toString(stream, StandardCharsets.UTF_8);
-            // close stream
-            stream.close();
+            temp = Main.getFunctionalBackend().getEngineTextResource("/overworld/scripts/" + scriptname + ".des");
         } catch (IOException e){
             // oh no
             throw new RuntimeException("Error trying to read in script resource", e);
@@ -71,15 +65,15 @@ public class MapScriptParser {
                 // split string
                 String[] split = line.split("\\s+");
                 // check to see if flag exists
-                if (Main.state_storage.containsKey(split[1])){
+                if (MailQuestJRE.state_storage.containsKey(split[1])){
                     // check if false
-                    if (!(boolean) Main.state_storage.get(split[1])){
+                    if (!(boolean) MailQuestJRE.state_storage.get(split[1])){
                         // bail out due to failed condition
                         return;
                     }
                 } else {
                     // this flag does not exist at all. probably normal buuuut
-                    if (Main.debugging) System.err.println("Flag \"" + split[1] +"\" does not exit in state storage!");
+                    if (MailQuestJRE.debugging) Main.getFunctionalBackend().logError("Flag \"" + split[1] +"\" does not exit in state storage!");
                     // this returned originally but like, why? if the flag doesnt exist we shouldnt do this
                     // ^^ an idiot wrote this, getting rid of return breaks all previously-made collision updating scripts
                     //      so yes, this return is important!
@@ -103,17 +97,17 @@ public class MapScriptParser {
                 // split the line
                 String[] split = line.split("\\s+");
                 // set the flag in the state array to be true
-                if (Main.state_storage.containsKey(split[1])){
+                if (MailQuestJRE.state_storage.containsKey(split[1])){
                     // remove it
-                    Main.state_storage.remove(split[1]);
+                    MailQuestJRE.state_storage.remove(split[1]);
                 }
                 // insert a new key into the table and set it to be true
-                Main.state_storage.put(split[1], true);
+                MailQuestJRE.state_storage.put(split[1], true);
             } else if (line.startsWith("RUN_SCRIPT")){
                 // split the lines
                 String[] split = line.split("\\s+");
                 // make a new script parser
-                if (Main.debugging) System.err.println("Script called script: " + split[1]);
+                if (MailQuestJRE.debugging) Main.getFunctionalBackend().logError("Script called script: " + split[1]);
                 MapScriptParser subparser = new MapScriptParser(split[1]);
                 subparser.runScript(state);
             } else if (line.startsWith("GIVE_WEAPON")){
@@ -127,10 +121,10 @@ public class MapScriptParser {
                     throw new IllegalArgumentException("Invalid weapon id given in script!", e);
                 }
                 // give it to the player
-                if (!Main.player.getUnlocked_weapons().contains(weapon)){
-                    Main.player.getUnlocked_weapons().add(weapon);
+                if (!MailQuestJRE.player.getUnlocked_weapons().contains(weapon)){
+                    MailQuestJRE.player.getUnlocked_weapons().add(weapon);
                 } else {
-                    if (Main.debugging) System.err.println("Player already has " + weapon);
+                    if (MailQuestJRE.debugging) Main.getFunctionalBackend().logError("Player already has " + weapon);
                 }
             } else if (line.startsWith("ENCOUNTER")){
                 // split line
@@ -138,7 +132,7 @@ public class MapScriptParser {
                 // cause an encounter to occur when returned to overworld
                 ReflectionUtils.queueBattleOnOverworldReturn(split[1], Integer.parseInt(split[2]));
                 // for debug reasons; force the menu closed
-                if (Main.debugging) ReflectionUtils.forceMenuClosed();
+                if (MailQuestJRE.debugging) ReflectionUtils.forceMenuClosed();
             } else if (line.startsWith("MOD_FIGHTTYPE")){
                 // split it and then get the new battle type
                 String[] split = line.split("\\s+");
@@ -182,7 +176,7 @@ public class MapScriptParser {
                 // split string
                 String[] split = line.split("\\s+");
                 // add key item to our player's inventory
-                Main.player.getKeyitems().add(split[1]);
+                MailQuestJRE.player.getKeyitems().add(split[1]);
             } else if (line.startsWith("LOAD_MAP")){
                 // syntax: LOAD_MAP <mapname> <spawnpoint>
                 // split the arguments

@@ -1,6 +1,6 @@
 package com.eziosoft.mailquestjre.entities;
 
-import com.eziosoft.mailquestjre.Main;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.json.FightableEntity;
 
 public class SimpleEntity implements BattleEntity {
@@ -78,14 +78,14 @@ public class SimpleEntity implements BattleEntity {
     public int performRegularAttack(BattleEntity target) {
         // first, preform rng on if we miss or not
         assert this.missrate > 0;
-        int miss = Main.random.nextInt(this.missrate);
+        int miss = MailQuestJRE.random.nextInt(this.missrate);
         if (miss % 4 == 3){
             // you missed, dumbass
             return -1;
         }
         // otherwise, calculate damage based on your attack and their defense
         // simpleentities dont have equipable weapons, so no special bonus is required
-        int dmg = ((this.atk) - (target.getDef() - Main.random.nextInt(3))) + 1;
+        int dmg = ((this.atk) - (target.getDef() - MailQuestJRE.random.nextInt(3))) + 1;
         // ensure you do atleast 1 damage
         if (dmg <= 0) dmg = 1;
         return dmg;

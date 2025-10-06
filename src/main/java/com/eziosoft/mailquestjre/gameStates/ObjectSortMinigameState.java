@@ -1,24 +1,26 @@
 package com.eziosoft.mailquestjre.gameStates;
 
-import com.eziosoft.mailquestjre.Main;
+import com.alysoft.dankengine.Main;
+import com.alysoft.dankengine.enums.MovementDirections;
+import com.alysoft.dankengine.gameStates.GameState;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.renderObjects.TextboxObject;
+import com.alysoft.dankengine.renderer.DankGraphic;
+import com.alysoft.dankengine.utility.DankButtons;
+import com.alysoft.dankengine.utility.MousePos;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.renderObjects.*;
-import com.eziosoft.mailquestjre.stuff.MousePos;
 import com.eziosoft.mailquestjre.stuff.ReflectionUtils;
-import com.eziosoft.mailquestjre.stuff.TextSlicer;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
-import com.eziosoft.mailquestjre.stuff.enums.MovementDirections;
 import org.apache.commons.lang3.time.StopWatch;
+import com.alysoft.dankengine.utility.TextSlicer;
 
-import javax.imageio.ImageIO;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class ObjectSortMinigameState implements GameState{
+public class ObjectSortMinigameState implements GameState {
     // static variables to control things
     private static final long total_time = 60;
     private static final int required_score = 100;
@@ -41,7 +43,7 @@ public class ObjectSortMinigameState implements GameState{
     private boolean obj_on_screen = false;
     private boolean moving = false;
     private MovementDirections dir;
-    private BufferedImage background;
+    private DankGraphic background;
     /*
     0 -> red
     1 -> blue
@@ -64,10 +66,7 @@ public class ObjectSortMinigameState implements GameState{
         this.dir = MovementDirections.LEFT;
         // load the image from resources
         try {
-            InputStream stream = ObjectSortMinigameState.class.getResourceAsStream("/title/sort.png");
-            this.background = ImageIO.read(stream);
-            // close the stream
-            stream.close();
+            this.background = Main.getFunctionalBackend().getEngineGraphicResource("/title/sort.png");
         } catch (IOException e){
             throw new RuntimeException("Error while trying to load sort background image", e);
         }
@@ -100,7 +99,7 @@ public class ObjectSortMinigameState implements GameState{
             renderlist.add(how_failed);
             renderlist.add(press_button);
             // check for user input
-            if (keys.contains(KeyEvent.VK_Z)){
+            if (keys.contains(DankButtons.INPUT_ACTION)){
                 this.exitOnFail();
             }
         }else if (this.timer > 0) {
@@ -111,7 +110,7 @@ public class ObjectSortMinigameState implements GameState{
             // do we need to make a new obj?
             if (!this.obj_on_screen){
                 // make new object
-                int col = Main.random.nextInt(2);
+                int col = MailQuestJRE.random.nextInt(2);
                 boolean color;
                 // 0 is blue
                 // 1 is red
@@ -124,12 +123,12 @@ public class ObjectSortMinigameState implements GameState{
                 // only allow player input if the box is not moving
                 if (!this.moving) {
                     // we will take player input here
-                    if (keys.contains(KeyEvent.VK_LEFT)){
+                    if (keys.contains(DankButtons.INPUT_LEFT)){
                         // set moving to true
                         this.moving = true;
                         // set direction to left
                         this.dir = MovementDirections.LEFT;
-                    } else if (keys.contains(KeyEvent.VK_RIGHT)){
+                    } else if (keys.contains(DankButtons.INPUT_RIGHT)){
                         // set moving to true
                         this.moving = true;
                         // set direction to right
@@ -174,10 +173,10 @@ public class ObjectSortMinigameState implements GameState{
             renderlist.add(got_score);
             renderlist.add(res);
             renderlist.add(pressbuttom);
-            if (keys.contains(KeyEvent.VK_Z)) {
+            if (keys.contains(DankButtons.INPUT_ACTION)) {
                 if (total_score >= required_score) {
                     // set the flag to enable removal of the blockade
-                    Main.state_storage.put("dung1_puz2_pass", true);
+                    MailQuestJRE.state_storage.put("dung1_puz2_pass", true);
                     // switch the state back to the overworld
                     Main.current_state = GameStates.OVERWORLD.id;
                 } else {
@@ -197,7 +196,7 @@ public class ObjectSortMinigameState implements GameState{
         // display a textbox
         ReflectionUtils.displayTextbox("You failed the minigame! Time to perish!");
         // queue a battle
-        ReflectionUtils.queueBattleOnOverworldReturn("unholywater", Main.random.nextInt(1) + 5);
+        ReflectionUtils.queueBattleOnOverworldReturn("unholywater", MailQuestJRE.random.nextInt(1) + 5);
         // we're done here, switch scenes
         Main.current_state = GameStates.OVERWORLD.id;
     }
@@ -220,7 +219,7 @@ public class ObjectSortMinigameState implements GameState{
                 this.framecounter -= 1;
             }
             // check for input
-            if (keys.contains(KeyEvent.VK_Z)){
+            if (keys.contains(DankButtons.INPUT_ACTION)){
                 // get rid of the textbox
                 this.game_started = true;
                 this.framecounter = 0;
@@ -288,7 +287,7 @@ public class ObjectSortMinigameState implements GameState{
         }
         // is either side's score set to -1?
         if (this.score_right == -1 || this.score_left == -1){
-            if (Main.debugging) System.err.println("Failed! Red: " + this.score_left + " Blue: " + this.score_right);
+            if (MailQuestJRE.debugging) Main.getFunctionalBackend().logError("Failed! Red: " + this.score_left + " Blue: " + this.score_right);
             // stop the stopwatch
             this.watch.stop();
             // fail the player

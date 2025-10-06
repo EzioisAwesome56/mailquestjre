@@ -1,10 +1,10 @@
-package com.eziosoft.mailquestjre.gameStates;
+package com.alysoft.dankengine.gameStates;
 
-import com.eziosoft.mailquestjre.renderObjects.*;
-import com.eziosoft.mailquestjre.stuff.MousePos;
-import com.eziosoft.mailquestjre.stuff.TextSlicer;
+import com.alysoft.dankengine.renderObjects.*;
+import com.alysoft.dankengine.utility.DankButtons;
+import com.alysoft.dankengine.utility.MousePos;
+import com.alysoft.dankengine.utility.TextSlicer;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class testState implements GameState{
@@ -25,18 +25,18 @@ public class testState implements GameState{
         // check to see if mouse is present
         if (mouse.isInPanel()){
             // TODO: debug code, throw this out or something
-            //this.mouseobj.addPoint(mouse.getX(), mouse.getY());
+            this.mouseobj.addPoint(mouse.getX(), mouse.getY());
         }
-        //renderlist.add(this.mouseobj);
+        renderlist.add(this.mouseobj);
         // lock movement if a textbox is shown
         if (!this.isTextbox) {
-            if (keys.contains(KeyEvent.VK_RIGHT)) {
+            if (keys.contains(DankButtons.INPUT_RIGHT)) {
                 this.player.ApplyMoveRight();
-            } else if (keys.contains(KeyEvent.VK_LEFT)) {
+            } else if (keys.contains(DankButtons.INPUT_LEFT)) {
                 this.player.ApplyMoveLeft();
-            } else if (keys.contains(KeyEvent.VK_DOWN)){
+            } else if (keys.contains(DankButtons.INPUT_DOWN)){
                 this.player.ApplyMoveDown();
-            } else if (keys.contains(KeyEvent.VK_UP)){
+            } else if (keys.contains(DankButtons.INPUT_UP)){
                 this.player.ApplyMoveUp();
             }
         }
@@ -58,7 +58,7 @@ public class testState implements GameState{
                 }
                 obj.setArrowState(this.arrow);
                 // look for input to disable the textbox next frame
-                if (keys.contains(KeyEvent.VK_Z)){
+                if (keys.contains(DankButtons.INPUT_ACTION)){
                     this.isTextbox = false;
                     this.seentext = true;
                 }
@@ -68,7 +68,5 @@ public class testState implements GameState{
         // add everything to the render list
         renderlist.add(this.hi);
         renderlist.add(this.player);
-        BattleExclaim exclaim = new BattleExclaim(5, 5);
-        renderlist.add(exclaim);
     }
 }

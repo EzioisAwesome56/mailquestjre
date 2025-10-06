@@ -1,7 +1,7 @@
-package com.eziosoft.mailquestjre.gameStates;
+package com.alysoft.dankengine.gameStates;
 
-import com.eziosoft.mailquestjre.renderObjects.DrawableObject;
-import com.eziosoft.mailquestjre.stuff.MousePos;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.utility.MousePos;
 
 import java.util.ArrayList;
 

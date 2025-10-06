@@ -1,8 +1,11 @@
 package com.eziosoft.mailquestjre.renderObjects;
 
-import java.awt.*;
+import com.alysoft.dankengine.backends.base.GraphicsBackend;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.renderer.DankColor;
+import com.alysoft.dankengine.renderer.DankFont;
 
-public class TitleScreenOptionsRenderer implements DrawableObject{
+public class TitleScreenOptionsRenderer implements DrawableObject {
 
     // stuff for later
     private boolean show_continue;
@@ -17,10 +20,9 @@ public class TitleScreenOptionsRenderer implements DrawableObject{
     }
 
     @Override
-    public void drawObject(Graphics2D gfx) {
+    public void drawObject(GraphicsBackend gfx) {
         // setup graphics2d correctly
-        gfx.setColor(Color.black);
-        gfx.setFont(new Font("helvetica", Font.PLAIN, 27));
+        gfx.setupDrawString(new DankFont("helvetica", 0, 27), DankColor.black);
         /*
         the first option is continue if a save file is present
         if one isnt present, this code chunk will be skipped over
@@ -44,7 +46,6 @@ public class TitleScreenOptionsRenderer implements DrawableObject{
         // finally, draw credits
         gfx.drawString("Credits", xpos, basey);
         // then, we have to draw the selection arrow; pain and suffering
-        gfx.setColor(Color.green);
-        gfx.fillPolygon(new int[]{130, 130, 145}, new int[]{180 + (30 * this.option_selected), 200 + (30 * this.option_selected), 190 + (30 * this.option_selected)}, 3);
+        gfx.drawPolygonFilled(new int[]{130, 130, 145}, new int[]{180 + (30 * this.option_selected), 200 + (30 * this.option_selected), 190 + (30 * this.option_selected)}, 3, DankColor.green);
     }
 }

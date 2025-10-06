@@ -1,4 +1,4 @@
-package com.eziosoft.mailquestjre.stuff.enums;
+package com.alysoft.dankengine.enums;
 
 public enum MovementDirections {
     LEFT,

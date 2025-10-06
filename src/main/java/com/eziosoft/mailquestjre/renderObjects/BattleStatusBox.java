@@ -1,10 +1,12 @@
 package com.eziosoft.mailquestjre.renderObjects;
 
+import com.alysoft.dankengine.backends.base.GraphicsBackend;
+import com.alysoft.dankengine.renderObjects.DrawableObject;
+import com.alysoft.dankengine.renderer.DankColor;
+import com.alysoft.dankengine.renderer.DankFont;
 import com.eziosoft.mailquestjre.entities.BattleEntity;
 
-import java.awt.*;
-
-public class BattleStatusBox implements DrawableObject{
+public class BattleStatusBox implements DrawableObject {
 
     // variables we need for later
     private int hp;
@@ -34,7 +36,7 @@ public class BattleStatusBox implements DrawableObject{
 
 
     @Override
-    public void drawObject(Graphics2D gfx) {
+    public void drawObject(GraphicsBackend gfx) {
         // setup the draw positions
         int x;
         int y;
@@ -46,21 +48,18 @@ public class BattleStatusBox implements DrawableObject{
             y = 220;
         }
         // set the color for the outer box
-        gfx.setColor(Color.pink);
         // draw outer rectangle
-        gfx.fillRect(x, y, 200, 170);
+        gfx.drawRectangleFilled(x, y, 200, 170, DankColor.pink);
         // change color
-        gfx.setColor(Color.lightGray);
         // draw inner rectangle
-        gfx.fillRect(x + 8, y + 8, 184, 154);
+        gfx.drawRectangleFilled(x + 8, y + 8, 184, 154, DankColor.lightGray);
         // change color to black and setup for font rendering
-        gfx.setColor(Color.BLACK);
-        gfx.setFont(new Font("helvetica", Font.PLAIN, 27));
+        DankFont thefont = new DankFont("helvetica", 0, 27);
         // draw information required in the status box
-        gfx.drawString(this.name, x + 10, y + 30);
-        gfx.drawString("Lv." + Integer.toString(this.level),  x + 10, y + 60);
-        gfx.drawString("HP: " + Integer.toString(this.hp) + "/" + Integer.toString(this.maxhp), x + 10, y + 90);
-        gfx.drawString("MP: " + Integer.toString(this.magic) + "/" + Integer.toString(this.maxmagic), x + 10, y + 120);
-        gfx.drawString(this.status_cond, x + 10, y + 150);
+        gfx.drawTextSimple(x + 10, y + 30, thefont, DankColor.black, this.name);
+        gfx.drawTextSimple(x + 10, y + 60, thefont, DankColor.black, "Lv." + Integer.toString(this.level));
+        gfx.drawTextSimple( x + 10, y + 90, thefont, DankColor.black, "HP: " + Integer.toString(this.hp) + "/" + Integer.toString(this.maxhp));
+        gfx.drawTextSimple(x + 10, y + 120, thefont, DankColor.black, "MP: " + Integer.toString(this.magic) + "/" + Integer.toString(this.maxmagic));
+        gfx.drawTextSimple(x + 10, y + 150, thefont, DankColor.black, this.status_cond);
     }
 }

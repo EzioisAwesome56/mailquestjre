@@ -1,12 +1,12 @@
 package com.eziosoft.mailquestjre.stuff.predefs;
 
-import com.eziosoft.mailquestjre.Main;
-import com.eziosoft.mailquestjre.gameStates.BattleState;
+import com.alysoft.dankengine.Main;
+import com.alysoft.dankengine.utility.TextSlicer;
+import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.gameStates.OverworldState;
 import com.eziosoft.mailquestjre.stuff.PredefinedFunctions;
 import com.eziosoft.mailquestjre.stuff.ReflectionUtils;
 import com.eziosoft.mailquestjre.stuff.TextEntryPrompt;
-import com.eziosoft.mailquestjre.stuff.TextSlicer;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
 
 import java.lang.reflect.Field;
@@ -16,7 +16,7 @@ public class MathChallengePredef extends PredefinedFunctions {
     public void doPredef() {
         // check to see if we already passed this event
         try {
-            if ((boolean) Main.state_storage.get("dung1_puz1_pass")) {
+            if ((boolean) MailQuestJRE.state_storage.get("dung1_puz1_pass")) {
                 // we don't need to do the math test again
                 return;
             }
@@ -87,7 +87,7 @@ public class MathChallengePredef extends PredefinedFunctions {
         if (!failedone && !failedtwo && !failedthree){
             base += " ----- VERDICT: PASS";
             // set the state flag for being able to pass the blockade
-            Main.state_storage.put("dung1_puz1_pass", true);
+            MailQuestJRE.state_storage.put("dung1_puz1_pass", true);
         } else {
             base += " ----- VERDICT: FAIL!";
             // spawn a lv 5 high postman to fight
