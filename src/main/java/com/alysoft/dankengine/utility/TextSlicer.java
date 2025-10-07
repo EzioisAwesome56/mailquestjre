@@ -9,7 +9,7 @@ public class TextSlicer {
     private String content;
     private int counter = 0;
 
-    private static HashMap<String, String> replacable_strings;
+    private static HashMap<String, String> replacable_strings = new HashMap<>();
     public static void registerString(String placeholder, String replacement){
         replacable_strings.put(placeholder, replacement);
     }
