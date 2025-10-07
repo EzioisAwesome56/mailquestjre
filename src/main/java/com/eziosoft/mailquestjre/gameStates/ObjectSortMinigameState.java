@@ -23,7 +23,8 @@ import java.util.concurrent.TimeUnit;
 public class ObjectSortMinigameState implements GameState {
     // static variables to control things
     private static final long total_time = 60;
-    private static final int required_score = 100;
+    // reduced needed score because it was too hard on android
+    private static final int required_score = 80;
 
     /*
     to win this state, you need to get a score of atleast TDB TODO: THAT
