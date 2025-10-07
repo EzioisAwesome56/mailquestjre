@@ -2,6 +2,7 @@ package com.eziosoft.mailquestjre;
 
 import com.alysoft.dankengine.Main;
 import com.alysoft.dankengine.gameStates.testState;
+import com.alysoft.dankengine.utility.TextSlicer;
 import com.eziosoft.mailquestjre.gameStates.*;
 import com.eziosoft.mailquestjre.stuff.*;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
@@ -24,6 +25,8 @@ public class MailQuestJRE {
 
     public static void PreformEarlyInit(){
         Main.window_title = "MailQuest: Java Edition";
+        // register strings
+        TextSlicer.registerString("<player>", player.getName());
     }
 
     public static void PreformInitialLoading() throws Exception {
