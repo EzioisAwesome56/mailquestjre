@@ -25,8 +25,7 @@ public class MailQuestJRE {
 
     public static void PreformEarlyInit(){
         Main.window_title = "MailQuest: Java Edition";
-        // register strings
-        TextSlicer.registerString("<player>", player.getName());
+
     }
 
     public static void PreformInitialLoading() throws Exception {

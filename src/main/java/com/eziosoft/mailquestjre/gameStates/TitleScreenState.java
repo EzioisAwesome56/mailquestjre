@@ -6,6 +6,7 @@ import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankGraphic;
 import com.alysoft.dankengine.utility.DankButtons;
 import com.alysoft.dankengine.utility.MousePos;
+import com.alysoft.dankengine.utility.TextSlicer;
 import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.renderObjects.SimpleImageRenderer;
 import com.eziosoft.mailquestjre.renderObjects.TitleScreenOptionsRenderer;
@@ -95,6 +96,8 @@ public class TitleScreenState implements GameState {
                 // call the routine to load the save file
                 SaveFileUtils.loadSaveFile();
                 // switch states to the overworld state
+                // before anything else we can register the replacement text also
+                TextSlicer.registerString("<player>", MailQuestJRE.player.getName());
                 Main.current_state = GameStates.OVERWORLD.id;
                 break;
             case 1:
@@ -108,6 +111,8 @@ public class TitleScreenState implements GameState {
                 // TODO: actually make this cutscene at some point
                 cutscene.loadCutscene("opening");
                 // switch to the cutscene state
+                // before anything else we can register the replacement text also
+                TextSlicer.registerString("<player>", MailQuestJRE.player.getName());
                 Main.current_state = GameStates.CUTSCENE.id;
                 break;
             case 2:
