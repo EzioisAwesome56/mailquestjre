@@ -326,13 +326,13 @@ public class DesktopBackend extends EngineBackend {
 
     @Override
     public void drawCircle(int x, int y, int radius, DankColor Color) {
-        this.gfx.setColor(this.convertDankToColor(Color));
-        this.gfx.fillOval(x, y, radius, radius);
+        throw new RuntimeException("STUB FUNCTION");
     }
 
     @Override
     public void drawCircleFilled(int x, int y, int radius, DankColor Color) {
-        throw new RuntimeException("STUB FUNCTION");
+        this.gfx.setColor(this.convertDankToColor(Color));
+        this.gfx.fillOval(x, y, radius, radius);
     }
 
     @Override
