@@ -21,6 +21,6 @@ public class StartObjSort extends PredefinedFunctions {
         // reset the state
         state.resetState();
         // then, switch to that state
-        Main.current_state = GameStates.OBJSORT.id;
+        Main.changeState(GameStates.OBJSORT.id);
     }
 }

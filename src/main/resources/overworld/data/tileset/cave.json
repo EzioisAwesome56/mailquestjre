@@ -1,6 +1,7 @@
 {
 	"tileset_name": "Cave Tileset",
 	"basefolder": "cave",
+    "legacy_tileset": true,
 	"tiles": {
 		"0": {
 			"graphics": "cavepc4",

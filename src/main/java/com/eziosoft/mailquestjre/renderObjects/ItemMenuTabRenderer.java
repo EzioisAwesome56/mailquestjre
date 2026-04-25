@@ -4,6 +4,7 @@ import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankFont;
+import com.alysoft.dankengine.utility.Camera;
 
 public class ItemMenuTabRenderer implements DrawableObject {
     private int tab;
@@ -17,7 +18,7 @@ public class ItemMenuTabRenderer implements DrawableObject {
     }
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
        // set color and draw one really long box
         gfx.drawRectangleFilled(0, 0, 500, 50, DankColor.pink);
         // draw 3 smaller inner rectangles

@@ -3,6 +3,8 @@ package com.eziosoft.mailquestjre.renderObjects;
 import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankGraphic;
+import com.alysoft.dankengine.utility.Camera;
+import com.alysoft.dankengine.utility.ZeroCamera;
 
 public class SimpleImageRenderer implements DrawableObject {
     private final int x;
@@ -19,8 +21,17 @@ public class SimpleImageRenderer implements DrawableObject {
     }
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         // draw using the image and x/y coords
-        this.content.drawGraphic(this.x, this.y, gfx);
+        int drawx;
+        int drawy;
+        if (camera instanceof ZeroCamera){
+            drawx = this.x;
+            drawy = this.y;
+        } else {
+            drawx = -camera.getX() % this.content.getWidth();
+            drawy = -camera.getY() % this.content.getHeight();
+        }
+        this.content.drawGraphic(drawx, drawy, gfx);
     }
 }

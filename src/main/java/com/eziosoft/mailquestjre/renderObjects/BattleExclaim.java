@@ -4,6 +4,7 @@ import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankFont;
+import com.alysoft.dankengine.utility.Camera;
 
 public class BattleExclaim implements DrawableObject {
     private int tilex;
@@ -15,7 +16,7 @@ public class BattleExclaim implements DrawableObject {
     }
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         // draw the outline of the box
         gfx.drawRectangle(25 * this.tilex, 25 * this.tiley, 25, 25, DankColor.black);
         // change color and draw inner box

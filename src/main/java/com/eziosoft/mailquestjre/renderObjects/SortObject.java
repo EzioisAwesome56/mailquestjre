@@ -3,6 +3,8 @@ package com.eziosoft.mailquestjre.renderObjects;
 import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankColor;
+import com.alysoft.dankengine.utility.Camera;
+
 public class SortObject implements DrawableObject {
     // variables
     private boolean isRed;
@@ -28,7 +30,7 @@ public class SortObject implements DrawableObject {
 
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         // set color based on variable
         if (this.isRed){
             // draw a 50x50 box

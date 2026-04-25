@@ -8,10 +8,7 @@ import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderObjects.TextboxObject;
 import com.alysoft.dankengine.renderObjects.TiledMovement;
 import com.alysoft.dankengine.renderer.DankGraphic;
-import com.alysoft.dankengine.utility.DankButtons;
-import com.alysoft.dankengine.utility.MousePos;
-import com.alysoft.dankengine.utility.TextSlicer;
-import com.alysoft.dankengine.utility.TiledMapUtils;
+import com.alysoft.dankengine.utility.*;
 import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.json.*;
 import com.eziosoft.mailquestjre.renderObjects.*;
@@ -55,6 +52,7 @@ public class OverworldState implements GameState {
     private boolean show_arrow = false;
     private boolean event_over = false;
     private boolean has_warped = false;
+    private ScrollCamera camera;
 
     // debug state shit
     // TODO: maybe remove later?
@@ -108,7 +106,7 @@ public class OverworldState implements GameState {
                 // unqueue the battle
                 this.battle_queued = false;
                 // switch scenes
-                Main.current_state = GameStates.BATTLE.id;
+                Main.changeState(GameStates.BATTLE.id);
                 /*
                 HOTFIX: if you are standing on an event tile after returning from a battle,
                 sometimes there can be a leftover action key press in the queue
@@ -173,6 +171,9 @@ public class OverworldState implements GameState {
         }
         // add plater to gfx list
         renderlist.add(this.playergfx);
+        // make the camera move to the player's current position
+        this.camera.followPointX(this.playergfx.getX() + (Main.tile_size / 2), 0, this.map_width * Main.tile_size);
+        this.camera.followPointY(this.playergfx.getY() + (Main.tile_size / 2), 0, this.map_height * Main.tile_size);
         // is the menu open?
         if (this.isPauseMenu){
             // run the routine to handle that
@@ -196,13 +197,36 @@ public class OverworldState implements GameState {
         }
     }
 
+    @Override
+    public Camera getStateCamera() {
+        return (Camera) this.camera;
+    }
+
+    /**
+     * ensures a camera is created when a scene is switched too
+     * otherwise this makes a lot of things very unhappy
+     */
+    @Override
+    public void createCamera() {
+        // if a camera doesn't already exist, create one
+        if (this.camera == null){
+            // based on the resolution of the game itself
+            this.camera = new ScrollCamera(Main.display_width, Main.display_height);
+        }
+
+    }
+
+    // these height and width values are in tiles,
+    // not pixels
+    private int map_width;
+    private int map_height;
+
     /*
     this actually loads the map when called
     gets automatically called if loadFinished is set to false
     make sure you have a valid filename set first though!
      */
     private void doInitialLoad(){
-        // TODO: update to use backend functions
         // first, we have to try and load whatever json file it wants us to load
         OverworldMap map;
         try {
@@ -215,6 +239,9 @@ public class OverworldState implements GameState {
         }
         // ok, we have the map now, set it into place
         this.current_map = map;
+        // FIXME: don't hardcode map sizes, put them in the map's json file. this will allow for larger maps in the future
+        this.map_width = 20;
+        this.map_height = 20;
         // we will now attempt to load the tileset for this map now
         MapTileSet tileset;
         try {
@@ -312,11 +339,11 @@ public class OverworldState implements GameState {
                 switch (this.menu_item_selected){
                     case 0: // stats button
                         // switch states
-                        Main.current_state = GameStates.STATS.id;
+                        Main.changeState(GameStates.STATS.id);
                         break;
                     case 1: // item menu
                         // switch state to the item menu
-                        Main.current_state = GameStates.ITEMS.id;
+                        Main.changeState(GameStates.ITEMS.id);
                         // tell it the return state
                         ((ItemMenuState) Main.getState(GameStates.ITEMS.id)).setReturnState(GameStates.OVERWORLD);
                         break;
@@ -399,12 +426,12 @@ public class OverworldState implements GameState {
         int xpos = 0;
         int ypos = 0;
         // create the image to draw onto
-        this.cached_map_bg = Main.getFunctionalBackend().generateNewGraphic(500, 500, true);
+        this.cached_map_bg = Main.getFunctionalBackend().generateNewGraphic(this.map_width * Main.tile_size, this.map_height * Main.tile_size, true);
         // then, get the graphics from that
         GraphicsBackend gfx = this.cached_map_bg.getDrawable();
         // time to do the things
-        for (int y = 0; y < 20; y++){
-            for (int x = 0; x < 20; x++){
+        for (int y = 0; y < this.map_height; y++){
+            for (int x = 0; x < this.map_width; x++){
                 // get the current tile in the tilemap matrix
                 int tile = this.tile_map[y][x];
                 // load the graphics if need be
@@ -423,19 +450,23 @@ public class OverworldState implements GameState {
                         // something broke, just give up
                         throw new IllegalStateException("Error trying to load tile graphic " + this.tileset.getTiles().get(tile).getGraphics(), e);
                     }
+                    // do we need to scale the tiles?
+                    if (this.tileset.isLegacy_tileset()){
+                        todraw = Main.getFunctionalBackend().upscaleGraphic(Main.tile_size, Main.tile_size, todraw);
+                    }
                     // next, cache it for later
                     graphicscache.put(tile, todraw);
                     if (MailQuestJRE.debugging) Main.getFunctionalBackend().logError("Loaded tile graphics: " + this.tileset.getTiles().get(tile).getGraphics() + ".png");
                 }
                 // now, we can draw the tile onto the map
                 todraw.drawGraphic(xpos, ypos, gfx);
-                // add 25 to our xpos
-                xpos += 25;
+                // add the size of 1 tile to the xpos
+                xpos += Main.tile_size;
             }
             // we end of this x loop, reset xpos to 0
             xpos = 0;
-            // add 25 to ypos
-            ypos += 25;
+            // add the size of one tile to the y position
+            ypos += Main.tile_size;
         }
         // we're done drawing now, time to clean up
         gfx.cleanupGraphics();
@@ -613,7 +644,7 @@ public class OverworldState implements GameState {
             // tell it to load our script
             scene.loadCutscene(event.getEventtext());
             // switch scenes
-            Main.current_state = GameStates.CUTSCENE.id;
+            Main.changeState(GameStates.CUTSCENE.id);
         }
     }
 

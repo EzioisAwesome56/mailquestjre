@@ -1,6 +1,7 @@
 {
 	"tileset_name": "Basic Town Tileset",
 	"basefolder": "townroute",
+    "legacy_tileset": true,
 	"tiles": {
 		"0": {
 			"graphics": "road_bottom",

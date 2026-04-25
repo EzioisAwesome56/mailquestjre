@@ -5,6 +5,7 @@ import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankGraphic;
+import com.alysoft.dankengine.utility.Camera;
 
 public class BattleSprite implements DrawableObject {
 
@@ -28,7 +29,7 @@ public class BattleSprite implements DrawableObject {
     }
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         if (this.sprite != null) {
             this.sprite.drawGraphic(this.xpos, this.ypos, gfx);
         } else {

@@ -25,5 +25,6 @@ public interface BasicFunctionsBackend {
     String getEngineTextResource(String name) throws IOException;
     DankGraphic getEngineGraphicResource(String name) throws IOException;
     DankGraphic generateNewGraphic(int width, int height, boolean transparent);
+    DankGraphic upscaleGraphic(int width, int height, DankGraphic gfx);
     File getExternalFile(String filename);
 }

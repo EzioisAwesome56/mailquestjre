@@ -2,6 +2,8 @@ package com.alysoft.dankengine.renderObjects;
 
 import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderer.DankColor;
+import com.alysoft.dankengine.utility.Camera;
+import com.alysoft.dankengine.utility.ScrollCamera;
 
 import java.util.ArrayList;
 
@@ -15,7 +17,7 @@ public class TestMousePoint implements DrawableObject{
     }
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         for (int[] pair : this.points){
             gfx.drawRectangleFilled(pair[0], pair[1], 1, 1, DankColor.magenta);
         }

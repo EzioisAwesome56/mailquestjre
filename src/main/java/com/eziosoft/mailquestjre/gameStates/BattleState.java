@@ -3,9 +3,7 @@ package com.eziosoft.mailquestjre.gameStates;
 import com.alysoft.dankengine.Main;
 import com.alysoft.dankengine.gameStates.GameState;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
-import com.alysoft.dankengine.utility.DankButtons;
-import com.alysoft.dankengine.utility.MousePos;
-import com.alysoft.dankengine.utility.TextSlicer;
+import com.alysoft.dankengine.utility.*;
 import com.eziosoft.mailquestjre.renderObjects.*;
 import com.eziosoft.mailquestjre.stuff.Player;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
@@ -253,6 +251,21 @@ public class BattleState implements GameState {
         if (this.inittextdone && this.draw_statusbox) this.drawStatusbox(renderlist);
     }
 
+    // this scene does not need a scrolling camera, so we
+    // just use a zerocamera for it
+    private Camera camera;
+    @Override
+    public void createCamera() {
+        if (this.camera == null){
+            this.camera = new ZeroCamera();
+        }
+    }
+    @Override
+    public Camera getStateCamera() {
+        // we shouldnt need a camera here, if we do i am going to explode
+        return this.camera;
+    }
+
     // decluttering main loop
     private void handleMenuInput(ArrayList keys){
         boolean inputed = false;
@@ -343,7 +356,7 @@ public class BattleState implements GameState {
                     // TODO ALSO: detect if a level up is in order, and switch to the level up scene.
                     //      that doesnt exist yet but it needs to!
                     if (this.playerdead) this.doStuffForPlayerDeath();
-                    Main.current_state = GameStates.OVERWORLD.id;
+                    Main.changeState(GameStates.OVERWORLD.id);
                 }
                 // switch states for a level up
                 if (this.queueLevelUp){

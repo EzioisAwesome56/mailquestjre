@@ -4,6 +4,7 @@ import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankFont;
+import com.alysoft.dankengine.utility.Camera;
 import com.eziosoft.mailquestjre.stuff.ItemMenuListItem;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class ItemMenuListRenderer implements DrawableObject {
     }
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         // draw outer box first
         // set the color for that
         gfx.drawRectangleFilled(0, 60, 500, 440, DankColor.pink);

@@ -4,6 +4,7 @@ import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankFont;
+import com.alysoft.dankengine.utility.Camera;
 
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
@@ -48,7 +49,7 @@ public class BattleTextbox implements DrawableObject {
     }
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         this.content = this.makeString(this.content_raw, gfx);
         if (this.split_mode){
             this.drawSplitMode(gfx);

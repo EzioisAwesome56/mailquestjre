@@ -2,7 +2,6 @@ package com.eziosoft.mailquestjre;
 
 import com.alysoft.dankengine.Main;
 import com.alysoft.dankengine.gameStates.testState;
-import com.alysoft.dankengine.utility.TextSlicer;
 import com.eziosoft.mailquestjre.gameStates.*;
 import com.eziosoft.mailquestjre.stuff.*;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
@@ -25,6 +24,11 @@ public class MailQuestJRE {
 
     public static void PreformEarlyInit(){
         Main.window_title = "MailQuest: Java Edition";
+        // setup the game variables for displaying the window
+        Main.display_height = 500;
+        Main.display_width = 500;
+        // 50x50 pixel tiles on a 500x500 display = 10x10 tile displays
+        Main.tile_size = 50;
 
     }
 
@@ -54,7 +58,7 @@ public class MailQuestJRE {
             state.has_save();
         }
         // change the current state of the engine
-        Main.current_state = GameStates.TITLE.id;
+        Main.changeState(GameStates.TITLE.id);
     }
 
 

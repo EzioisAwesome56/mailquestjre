@@ -1,6 +1,7 @@
 {
 	"tileset_name": "Indoor Hospital Tileset",
 	"basefolder": "spit",
+    "legacy_tileset": true,
 	"tiles": {
 		"0": {
 			"graphics": "shopkeep4",

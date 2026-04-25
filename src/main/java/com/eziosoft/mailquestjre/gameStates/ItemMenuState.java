@@ -4,15 +4,13 @@ import com.alysoft.dankengine.Main;
 import com.alysoft.dankengine.gameStates.GameState;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderObjects.TextboxObject;
-import com.alysoft.dankengine.utility.DankButtons;
-import com.alysoft.dankengine.utility.MousePos;
+import com.alysoft.dankengine.utility.*;
 import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.renderObjects.ItemMenuListRenderer;
 import com.eziosoft.mailquestjre.renderObjects.ItemMenuTabRenderer;
 import com.eziosoft.mailquestjre.stuff.ItemMenuListItem;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
 import com.eziosoft.mailquestjre.stuff.enums.PlayerWeapons;
-import com.alysoft.dankengine.utility.TextSlicer;
 
 import java.util.ArrayList;
 
@@ -112,7 +110,7 @@ public class ItemMenuState implements GameState {
                             throw new IllegalStateException("No return state was provided!");
                         }
                         // exit the menu
-                        Main.current_state = this.return_state.id;
+                        Main.changeState(this.return_state.id);
                         // put frames on the counter for later
                         this.framecounter = 6;
                     }
@@ -149,6 +147,21 @@ public class ItemMenuState implements GameState {
                 this.framecounter -= 1;
             }
         }
+    }
+
+    // this scene does not need a scrolling camera, so
+    // a zero camera is used for it instead
+    private Camera camera;
+    @Override
+    public void createCamera() {
+        if (this.camera == null){
+            this.camera = new ZeroCamera();
+        }
+    }
+    @Override
+    public Camera getStateCamera() {
+        // shouldnt need a camera here
+        return this.camera;
     }
 
     /**

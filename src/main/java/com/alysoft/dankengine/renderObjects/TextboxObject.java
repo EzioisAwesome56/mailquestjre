@@ -3,10 +3,10 @@ package com.alysoft.dankengine.renderObjects;
 import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankFont;
+import com.alysoft.dankengine.utility.Camera;
 
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.Hashtable;
 
 public class TextboxObject implements DrawableObject{
     // line break magic was borrowed from a very old oracle JDK example
@@ -42,7 +42,7 @@ public class TextboxObject implements DrawableObject{
     // note: the textbox can fit 6 lines of text
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         // quickly, we need to get our content
         this.content = this.makeString(this.content_raw, gfx);
         // set color for outer box

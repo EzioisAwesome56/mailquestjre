@@ -2,6 +2,7 @@ package com.alysoft.dankengine.renderObjects;
 
 import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderer.DankColor;
+import com.alysoft.dankengine.utility.Camera;
 
 public class exampleObj implements DrawableObject {
 
@@ -45,7 +46,7 @@ public class exampleObj implements DrawableObject {
     }
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         // draw a square
         gfx.drawRectangleFilled(this.x, this.y, 50, 50, DankColor.magenta);
     }

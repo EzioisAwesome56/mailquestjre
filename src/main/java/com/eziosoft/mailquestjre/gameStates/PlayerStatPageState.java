@@ -4,8 +4,7 @@ import com.alysoft.dankengine.Main;
 import com.alysoft.dankengine.gameStates.GameState;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankGraphic;
-import com.alysoft.dankengine.utility.DankButtons;
-import com.alysoft.dankengine.utility.MousePos;
+import com.alysoft.dankengine.utility.*;
 import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.renderObjects.PlayerStatRenderer;
 import com.eziosoft.mailquestjre.renderObjects.SimpleImageRenderer;
@@ -40,7 +39,24 @@ public class PlayerStatPageState implements GameState {
         // if x is pressed, quit this dialog
         if (keys.contains(DankButtons.INPUT_CANCEL)){
             // switch scenes back to the overworld
-            Main.current_state = GameStates.OVERWORLD.id;
+            Main.changeState(GameStates.OVERWORLD.id);
         }
+    }
+
+    /**
+     * This scene does not do any scrolling, so
+     * we will create a zero camera for this entire scene
+     */
+    private Camera camera;
+    @Override
+    public void createCamera() {
+        if (this.camera == null){
+            this.camera = new ZeroCamera();
+        }
+    }
+
+    @Override
+    public Camera getStateCamera() {
+        return this.camera;
     }
 }

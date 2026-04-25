@@ -4,6 +4,7 @@ import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankFont;
+import com.alysoft.dankengine.utility.Camera;
 import com.eziosoft.mailquestjre.entities.BattleEntity;
 
 public class BattleStatusBox implements DrawableObject {
@@ -36,7 +37,7 @@ public class BattleStatusBox implements DrawableObject {
 
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         // setup the draw positions
         int x;
         int y;

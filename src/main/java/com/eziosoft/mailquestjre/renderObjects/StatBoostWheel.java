@@ -4,6 +4,7 @@ import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankFont;
+import com.alysoft.dankengine.utility.Camera;
 
 public class StatBoostWheel implements DrawableObject {
     private final int number;
@@ -14,7 +15,7 @@ public class StatBoostWheel implements DrawableObject {
 
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         // set color and draw outer box
         gfx.drawRectangleFilled(400, 4, 60, 70, DankColor.pink);
         // draw inner box

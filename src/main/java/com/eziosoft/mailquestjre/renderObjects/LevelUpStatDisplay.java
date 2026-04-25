@@ -4,6 +4,7 @@ import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankFont;
+import com.alysoft.dankengine.utility.Camera;
 
 public class LevelUpStatDisplay implements DrawableObject {
     private final int hp;
@@ -32,7 +33,7 @@ public class LevelUpStatDisplay implements DrawableObject {
 
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         // set color to pink
         // draw the outer box
         gfx.drawRectangleFilled(4, 4, 300, 200, DankColor.pink);

@@ -30,7 +30,7 @@ public class DebugHelper {
             thestate.loadFoe("debug");
             thestate.setWildEncounterText();
             // switch states
-            Main.current_state = 1;
+            Main.changeState(1);
         } else if (keys.contains(DankButtons.INPUT_DEBUG2)){
             // disable all encounters for this area. good god this is annoying as hell
             ((OverworldState) Main.getState(GameStates.OVERWORLD.id)).setEncounterState(true);
@@ -45,7 +45,7 @@ public class DebugHelper {
             // reset it
             state.resetState();
             // switch to it next frame
-            Main.current_state = GameStates.OBJSORT.id;
+            Main.changeState(GameStates.OBJSORT.id);
         } else if (keys.contains(DankButtons.INPUT_DEBUG5)){
             // 9 is the debug key to start a cutscene!
             // load our cutscene engine
@@ -55,7 +55,7 @@ public class DebugHelper {
             // load our cutscene
             state.loadCutscene("postman1");
             // switch scenes
-            Main.current_state = GameStates.CUTSCENE.id;
+            Main.changeState(GameStates.CUTSCENE.id);
         } else if (keys.contains(DankButtons.INPUT_DEBUG6)){
             if (!didbuff) {
                 // buff the shit out of the player

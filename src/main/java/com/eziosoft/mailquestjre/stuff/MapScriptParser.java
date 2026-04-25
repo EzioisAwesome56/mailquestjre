@@ -171,7 +171,7 @@ public class MapScriptParser {
                 battle.scaleFoeByLevel(level);
                 battle.setBattleType(type);
                 // switch scenes to battle
-                Main.current_state = GameStates.BATTLE.id;
+                Main.changeState(GameStates.BATTLE.id);
             } else if (line.startsWith("GIVE_KEYITEM")){
                 // split string
                 String[] split = line.split("\\s+");
@@ -197,7 +197,7 @@ public class MapScriptParser {
                 // convert to int
                 int stateno = Integer.parseInt(split[1]);
                 // switch to that state
-                Main.current_state = stateno;
+                Main.changeState(stateno);
             }
         }
     }

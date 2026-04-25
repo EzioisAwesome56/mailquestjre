@@ -1,9 +1,7 @@
 package com.alysoft.dankengine.gameStates;
 
 import com.alysoft.dankengine.renderObjects.*;
-import com.alysoft.dankengine.utility.DankButtons;
-import com.alysoft.dankengine.utility.MousePos;
-import com.alysoft.dankengine.utility.TextSlicer;
+import com.alysoft.dankengine.utility.*;
 
 import java.util.ArrayList;
 
@@ -68,5 +66,19 @@ public class testState implements GameState{
         // add everything to the render list
         renderlist.add(this.hi);
         renderlist.add(this.player);
+    }
+
+
+    // use a zero camera to avoid most of the complex logic
+    @Override
+    public Camera getStateCamera() {
+        return this.c;
+    }
+    private Camera c;
+    @Override
+    public void createCamera() {
+        if (this.c == null){
+            this.c = new ZeroCamera();
+        }
     }
 }

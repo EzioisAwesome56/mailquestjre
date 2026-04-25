@@ -5,9 +5,7 @@ import com.alysoft.dankengine.gameStates.GameState;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderObjects.TextboxObject;
 import com.alysoft.dankengine.renderer.DankGraphic;
-import com.alysoft.dankengine.utility.DankButtons;
-import com.alysoft.dankengine.utility.MousePos;
-import com.alysoft.dankengine.utility.TextSlicer;
+import com.alysoft.dankengine.utility.*;
 import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.json.CutsceneFrame;
 import com.eziosoft.mailquestjre.json.CutsceneMetaFile;
@@ -164,11 +162,26 @@ public class CutsceneState implements GameState {
                     MapScriptParser parser = new MapScriptParser(this.cutscene_file.getScript());
                     parser.runScript((OverworldState) Main.getState(GameStates.OVERWORLD.id));
                 } else {
-                    Main.current_state = GameStates.OVERWORLD.id;
+                    Main.changeState(GameStates.OVERWORLD.id);
                 }
             } else {
-                Main.current_state = GameStates.OVERWORLD.id;
+                Main.changeState(GameStates.OVERWORLD.id);
             }
         }
+    }
+
+    // this scene does not require a camera,
+    // so a zerocamera is used instead
+    private Camera camera;
+
+    @Override
+    public void createCamera() {
+        if (this.camera == null){
+            this.camera = new ZeroCamera();
+        }
+    }
+    @Override
+    public Camera getStateCamera() {
+        return this.camera;
     }
 }

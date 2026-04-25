@@ -23,6 +23,8 @@ public class DesktopGraphic extends DankGraphic {
         //
     }
     public DesktopGraphic(BufferedImage img){
+        // set the image metadata
+        super(img.getHeight(), img.getWidth(), img.getTransparency() != Transparency.OPAQUE);
         this.image_data = img;
     }
 
@@ -50,6 +52,11 @@ public class DesktopGraphic extends DankGraphic {
     @Override
     public void flush() {
         this.image_data.flush();
+    }
+
+    @Override
+    public Object getRawData() {
+        return this.image_data;
     }
 
     class DesktopGraphicDrawable implements GraphicsBackend {

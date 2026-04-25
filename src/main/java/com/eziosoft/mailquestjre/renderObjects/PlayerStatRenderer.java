@@ -4,6 +4,7 @@ import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankFont;
+import com.alysoft.dankengine.utility.Camera;
 import com.eziosoft.mailquestjre.stuff.Player;
 
 public class PlayerStatRenderer implements DrawableObject {
@@ -15,7 +16,7 @@ public class PlayerStatRenderer implements DrawableObject {
 
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         // set color and draw outer box
         gfx.drawRectangleFilled(0, 0, 300, 500, DankColor.pink);
         // switch color and draw inner box

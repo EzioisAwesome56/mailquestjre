@@ -11,6 +11,13 @@ public class MapTileSet {
     private String tileset_name;
     // base folder in resouces folder for storing the graphics assets
     private String basefolder;
+    /**
+     * This flag will be set if the tileset was created before
+     * - scrollable maps was implemented
+     * - tile size was increased
+     * this will cause the tiles to be lazily upscaled to account for this
+     */
+    private boolean legacy_tileset;
 
     public HashMap<Integer, MapTile> getTiles() {
         return this.tiles;
@@ -22,5 +29,10 @@ public class MapTileSet {
 
     public String getTileset_name() {
         return this.tileset_name;
+    }
+
+    @Deprecated // you probably shouldn't rely on this!
+    public boolean isLegacy_tileset() {
+        return this.legacy_tileset;
     }
 }

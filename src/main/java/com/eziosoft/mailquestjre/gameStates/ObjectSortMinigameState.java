@@ -6,14 +6,12 @@ import com.alysoft.dankengine.gameStates.GameState;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderObjects.TextboxObject;
 import com.alysoft.dankengine.renderer.DankGraphic;
-import com.alysoft.dankengine.utility.DankButtons;
-import com.alysoft.dankengine.utility.MousePos;
+import com.alysoft.dankengine.utility.*;
 import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.renderObjects.*;
 import com.eziosoft.mailquestjre.stuff.ReflectionUtils;
 import com.eziosoft.mailquestjre.stuff.enums.GameStates;
 import org.apache.commons.lang3.time.StopWatch;
-import com.alysoft.dankengine.utility.TextSlicer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -179,13 +177,31 @@ public class ObjectSortMinigameState implements GameState {
                     // set the flag to enable removal of the blockade
                     MailQuestJRE.state_storage.put("dung1_puz2_pass", true);
                     // switch the state back to the overworld
-                    Main.current_state = GameStates.OVERWORLD.id;
+                    Main.changeState(GameStates.OVERWORLD.id);
                 } else {
                     // they failed, do the things that happen when they fail
                     this.exitOnFail();
                 }
             }
         }
+    }
+
+    /**
+     * this scene does not need a scrolling camera, so
+     * a zero camera is used
+     */
+    private Camera camera;
+    @Override
+    public void createCamera() {
+        if (this.camera == null){
+            this.camera = new ZeroCamera();
+        }
+    }
+
+    @Override
+    public Camera getStateCamera() {
+        // i don't think we actually need a camera for this state so it can stay like this
+        return this.camera;
     }
 
     // allow access to the failed variable
@@ -199,7 +215,7 @@ public class ObjectSortMinigameState implements GameState {
         // queue a battle
         ReflectionUtils.queueBattleOnOverworldReturn("unholywater", MailQuestJRE.random.nextInt(1) + 5);
         // we're done here, switch scenes
-        Main.current_state = GameStates.OVERWORLD.id;
+        Main.changeState(GameStates.OVERWORLD.id);
     }
 
 

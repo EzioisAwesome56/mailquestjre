@@ -21,6 +21,8 @@ import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
@@ -521,6 +523,34 @@ public class DesktopBackend extends EngineBackend {
     @Override
     public DankGraphic generateNewGraphic(int width, int height, boolean transparent) {
         return new DesktopGraphic(height, width, transparent);
+    }
+
+    @Override
+    public DankGraphic upscaleGraphic(int width, int height, DankGraphic source) {
+        // get the raw image data from the image
+        BufferedImage content;
+        if (!(source.getRawData() instanceof BufferedImage)){
+            throw new RuntimeException("Unexpected image type found in raw data!");
+        }
+        // now we can actually get our hands on it
+        content = (BufferedImage) source.getRawData();
+        // get the destination image ready
+        BufferedImage dest = new BufferedImage(width, height, content.getType());
+        // get the scaler ready
+        AffineTransform affine = new AffineTransform();
+        // we need to find what the scale factor is for each one, so lets do that
+        double scalex = (double) width / content.getWidth();
+        double scaley = (double) height / content.getHeight();
+        affine.scale(scalex, scaley);
+        // now setup the scale operation
+        AffineTransformOp scaleop = new AffineTransformOp(affine, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        // do the scale
+        dest = scaleop.filter(content, dest);
+        // do some cleanup
+        content.flush();
+        // create a new graphics and return it to the calling function
+        DankGraphic dank = new DesktopGraphic(dest);
+        return dank;
     }
 
     @Override

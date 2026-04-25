@@ -4,6 +4,7 @@ import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankFont;
+import com.alysoft.dankengine.utility.Camera;
 
 public class PlayerMenu implements DrawableObject {
 
@@ -15,7 +16,7 @@ public class PlayerMenu implements DrawableObject {
 
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         // set outer color
         // draw rectangle
         gfx.drawRectangleFilled(300, 0, 200, 190, DankColor.pink);

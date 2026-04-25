@@ -4,9 +4,7 @@ import com.alysoft.dankengine.Main;
 import com.alysoft.dankengine.gameStates.GameState;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankGraphic;
-import com.alysoft.dankengine.utility.DankButtons;
-import com.alysoft.dankengine.utility.MousePos;
-import com.alysoft.dankengine.utility.TextSlicer;
+import com.alysoft.dankengine.utility.*;
 import com.eziosoft.mailquestjre.MailQuestJRE;
 import com.eziosoft.mailquestjre.renderObjects.SimpleImageRenderer;
 import com.eziosoft.mailquestjre.renderObjects.TitleScreenOptionsRenderer;
@@ -66,6 +64,23 @@ public class TitleScreenState implements GameState {
         }
     }
 
+    /**
+     * this scene does not need a camera that scrolls, so a zero camera is created
+     * @return the camera for this state
+     */
+    @Override
+    public Camera getStateCamera() {
+        return this.camera;
+    }
+    private Camera camera;
+
+    @Override
+    public void createCamera() {
+        if (this.camera == null){
+            this.camera = new ZeroCamera();
+        }
+    }
+
     // these will be called later by the main thread on boot
     public void has_save(){
         this.has_save = true;
@@ -98,7 +113,7 @@ public class TitleScreenState implements GameState {
                 // switch states to the overworld state
                 // before anything else we can register the replacement text also
                 TextSlicer.registerString("<player>", MailQuestJRE.player.getName());
-                Main.current_state = GameStates.OVERWORLD.id;
+                Main.changeState(GameStates.OVERWORLD.id);
                 break;
             case 1:
                 // new game
@@ -113,7 +128,7 @@ public class TitleScreenState implements GameState {
                 // switch to the cutscene state
                 // before anything else we can register the replacement text also
                 TextSlicer.registerString("<player>", MailQuestJRE.player.getName());
-                Main.current_state = GameStates.CUTSCENE.id;
+                Main.changeState(GameStates.CUTSCENE.id);
                 break;
             case 2:
                 // options

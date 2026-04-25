@@ -4,6 +4,8 @@ import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankFont;
+import com.alysoft.dankengine.utility.Camera;
+
 public class SimpleTextRender implements DrawableObject {
     // stuff for later
     private String content;
@@ -21,7 +23,7 @@ public class SimpleTextRender implements DrawableObject {
 
 
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         // set graphics2d font and color
         // draw content
         gfx.drawTextSimple(this.x, this.y, new DankFont("helvetica", 0, 27), DankColor.black, this.content);

@@ -2,10 +2,9 @@ package com.alysoft.dankengine;
 
 import com.alysoft.dankengine.backends.base.BasicFunctionsBackend;
 import com.alysoft.dankengine.backends.base.EngineBackend;
-import com.alysoft.dankengine.backends.desktop.BaseGame;
 import com.alysoft.dankengine.backends.desktop.DesktopBackend;
 import com.alysoft.dankengine.gameStates.GameState;
-import com.alysoft.dankengine.gameStates.testState;
+import com.alysoft.dankengine.utility.Camera;
 import com.alysoft.dankengine.utility.MousePos;
 import com.alysoft.dankengine.enums.GameStates;
 import com.eziosoft.mailquestjre.MailQuestJRE;
@@ -15,8 +14,6 @@ import com.google.gson.Strictness;
 import org.apache.commons.lang3.time.StopWatch;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -47,9 +44,31 @@ public class Main {
 
     // game state list
     private static final ArrayList<GameState> states = new ArrayList<>();
-    public static int current_state = GameStates.TESTSTATE.id;
+    private static int current_state = GameStates.TESTSTATE.id;
     public static void addState(GameState state){
         states.add(state);
+    }
+
+    /**
+     * default values, should be changed by your initial loading class
+     */
+    public static int display_width = 0;
+    public static int display_height = 0;
+    public static int tile_size = 25;
+
+    /**
+     * change the current game state. replaces the old way of changing the game state
+     * @param state the integer ID of the state you want to swap too
+     */
+    private static boolean state_changed = false;
+    public static void changeState(int state){
+        current_state = state;
+        // get the camera from the new scene
+        GameState cur_state = states.get(current_state);
+        cur_state.createCamera();
+        camera = states.get(current_state).getStateCamera();
+        // set the variable to avoid weird rendering shit later
+        state_changed = true;
     }
     public static String window_title = "DankEngine";
 
@@ -59,12 +78,14 @@ public class Main {
     public static GameState getState(int index){
         return states.get(index);
     }
+    // new feature: the camera
+    public static Camera camera;
 
     public static void main(String[] args) {
         // TODO: figure out a clean way to allow early loads without hard coding it
         MailQuestJRE.PreformEarlyInit();
         // init the backend
-        backend = new DesktopBackend(args, 500, 500, window_title);
+        backend = new DesktopBackend(args, display_width, display_height, window_title);
         // there are a couple of debug flags left, so handle those
         for (String s : args){
             s = s.toLowerCase();
@@ -103,7 +124,7 @@ public class Main {
             // empty render list
             objs.clear();
             // produce the base game frame
-            backend.createEmptyFrame(500, 500);
+            backend.createEmptyFrame(display_height, display_width);
             // get key input
             ArrayList<Integer> keys = backend.getKeysDown();
             // attempt to get mouse position
@@ -111,14 +132,19 @@ public class Main {
             // run game state
             states.get(current_state).preformState(objs, keys, mouse_packet);
             // now we can render the frame
-            // draw all the objects in the array, in order
-            for (DrawableObject o : objs){
-                o.drawObject(backend);
+            if (!state_changed) {
+                // draw all the objects in the array, in order
+                for (DrawableObject o : objs) {
+                    o.drawObject(backend, camera);
+                }
+                // clean up
+                backend.cleanupGraphics();
+                // render next frame
+                backend.renderFrame();
+            } else {
+                // we only need to not render 1 frame so we can just reset the variable
+                state_changed = false;
             }
-            // clean up
-            backend.cleanupGraphics();
-            // render next frame
-            backend.renderFrame();
             // stop the render timer
             timer.stop();
             long rendertime = timer.getDuration().toNanos();

@@ -4,12 +4,13 @@ import com.alysoft.dankengine.Main;
 import com.alysoft.dankengine.backends.base.GraphicsBackend;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankGraphic;
+import com.alysoft.dankengine.utility.Camera;
 
 import java.io.IOException;
 
 public class TiledMovement implements DrawableObject {
 
-    // tiles are 25x25 pixels
+    // tile sizes are defined in Main.tile_size
     private int tilex = 0;
     private int tiley = 0;
     private int counter = 0;
@@ -47,6 +48,23 @@ public class TiledMovement implements DrawableObject {
         }
     }
 
+    /**
+     * converts tilex to regular x coords based on math
+     * @return raw x value
+     */
+    private int TileXtoX(){
+        return this.tilex * Main.tile_size;
+    }
+    private int TileYtoY(){
+        return this.tiley * Main.tile_size;
+    }
+    public int getX(){
+        return this.TileXtoX() + this.subtiles_x;
+    }
+    public int getY(){
+        return this.TileYtoY() + this.subtiles_y;
+    }
+
     public TiledMovement(){
         this.useGraphics = false;
     }
@@ -57,6 +75,12 @@ public class TiledMovement implements DrawableObject {
         } catch (IOException e){
             // something has gone horribly wrong
             throw new RuntimeException(e);
+        }
+        // FIXME: recreate the graphic in an image editor later
+        //      for a POC, this will get the job done, however
+        if (this.graphic.getWidth() < Main.tile_size){
+            this.graphic = Main.getFunctionalBackend().upscaleGraphic(Main.tile_size, Main.tile_size, this.graphic);
+            System.out.println("WARNING: a tiled movement object upscaled a graphic!");
         }
         // if we survived, enable graphic mode
         this.useGraphics = true;
@@ -79,12 +103,14 @@ public class TiledMovement implements DrawableObject {
         return this.isMoving;
     }
 
+    private final int movement_constant = 5;
+
     @Override
-    public void drawObject(GraphicsBackend gfx) {
+    public void drawObject(GraphicsBackend gfx, Camera camera) {
         // because this is ran every frame, we can run a little bit of update logic here
         if (this.isMoving){
             // check to see if we're done moving
-            if ((Math.abs(this.subtiles_x) < 25 && this.direction < 2) || (Math.abs(this.subtiles_y) < 25 && this.direction >= 2)){
+            if ((Math.abs(this.subtiles_x) < Main.tile_size && this.direction < 2) || (Math.abs(this.subtiles_y) < Main.tile_size && this.direction >= 2)){
                 if (this.counter == 1) {
                     // reset the counter
                     this.counter = 0;
@@ -92,16 +118,16 @@ public class TiledMovement implements DrawableObject {
                     switch (this.direction) {
                         case 0:
                             // move right 1 pixel
-                            this.subtiles_x += 1;
+                            this.subtiles_x += this.movement_constant;
                             break;
                         case 1:
-                            this.subtiles_x -= 1;
+                            this.subtiles_x -= this.movement_constant;
                             break;
                         case 2:
-                            this.subtiles_y += 1;
+                            this.subtiles_y += this.movement_constant;
                             break;
                         case 3:
-                            this.subtiles_y -= 1;
+                            this.subtiles_y -= this.movement_constant;
                             break;
                     }
                 }
@@ -131,11 +157,14 @@ public class TiledMovement implements DrawableObject {
             }
         }
         // regular drawing code goes here
+        // CAMERA UPDATE: because we use this same calculation twice in code, why not just put it before the draw call?
+        int draw_x = this.getX() - camera.getX();
+        int draw_y = this.getY() - camera.getY();
         if (!this.useGraphics) {
-            gfx.drawRectangleFilled((this.tilex * 25) + this.subtiles_x, (this.tiley * 25) + this.subtiles_y, 25, 25, DankColor.red);
+            gfx.drawRectangleFilled(draw_x, draw_y, 25, 25, DankColor.red);
         } else {
             // draw the sprite we have loaded
-            this.graphic.drawGraphic((this.tilex * 25) + this.subtiles_x, (this.tiley * 25) + this.subtiles_y, gfx);
+            this.graphic.drawGraphic(draw_x, draw_y, gfx);
         }
     }
 }

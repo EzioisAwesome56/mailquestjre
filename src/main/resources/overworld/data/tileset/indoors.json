@@ -1,6 +1,7 @@
 {
 	"tileset_name": "Indoor tileset",
 	"basefolder": "indoor",
+    "legacy_tileset": true,
 	"tiles": {
 		"0": {
 			"graphics": "bed4",
