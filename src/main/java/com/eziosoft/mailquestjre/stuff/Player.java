@@ -51,7 +51,10 @@ public class Player implements BattleEntity {
         // money and exp
         this.money = 0;
         this.exp = 0;
-        this.next_exp = 12;
+        //this.next_exp = 12;
+        // TODO: since we have a new EXP formula, set the inital required EXP state using it
+        //      further testing will be required to see if anything breaks
+        this.increaseEXPRequirements();
         this.keyitems = new ArrayList<>();
         // set the last heal point to your house
         this.last_heal_map = "player_house";
@@ -152,8 +155,13 @@ public class Player implements BattleEntity {
     public void gainExp(long gain){ this.exp += gain; }
     public long getNext_exp(){ return this.next_exp; }
     public void increaseEXPRequirements(){
+        // this code is loosely based on the bath for the "Fast" experience group on bulbapedia
+        int temp = Math.floorDiv((int) (4 * Math.pow(this.level, 3)), 5);
+        // make sure you need atleast 1
+        if (temp < 1) temp = 1;
+        this.next_exp = temp;
         // take the current exp value, multiply by 2
-        this.next_exp = this.next_exp * 2;
+        //this.next_exp = this.next_exp * 2;
     }
     public int getMoney() {
         return this.money;

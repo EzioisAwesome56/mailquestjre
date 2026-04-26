@@ -845,8 +845,6 @@ public class BattleState implements GameState {
                                 text += "MP!";
                                 break;
                         }
-                        // increase player level
-                        pobj.increaseLevel();
                         // setup a textbox
                         this.slicer = new TextSlicer(text);
                         // reset involved variables
@@ -873,10 +871,12 @@ public class BattleState implements GameState {
                 hadexp -= pobj.getNext_exp();
                 // reset player's experience points
                 pobj.resetEXP();
-                // give them whats leftover
-                pobj.gainExp(hadexp);
                 // increase required exp for next level
                 pobj.increaseEXPRequirements();
+                // give them whats leftover
+                pobj.gainExp(hadexp);
+                // increase player level
+                pobj.increaseLevel();
                 // roll 4 stat increases
                 // HP
                 this.stat_adds[0] = MailQuestJRE.random.nextInt(10) + 2;
