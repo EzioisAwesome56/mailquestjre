@@ -553,6 +553,35 @@ public class DesktopBackend extends EngineBackend {
         return dank;
     }
 
+    /**
+     * used to crop part of a larger image into a smaller one. mostly used for spritesheet handling
+     * @param width width of output
+     * @param height height of output
+     * @param startx x to start the crop at
+     * @param starty y to start the crop at
+     * @param gfx input image
+     * @return
+     */
+    @Override
+    public DankGraphic cropImage(int width, int height, int startx, int starty, DankGraphic gfx) {
+        // get the source buffered image from the DankGraphic
+        BufferedImage source;
+        if (!(gfx.getRawData() instanceof BufferedImage)){
+            throw new RuntimeException("Unexpected image format for this backend!");
+        }
+        source = (BufferedImage) gfx.getRawData();
+        // create a new image of the set size and same image type
+        BufferedImage output = new BufferedImage(width, height, source.getType());
+        // we will be using Graphics2D to crop this on the Desktop backend, so get the graphics of the output image
+        Graphics2D g2d = output.createGraphics();
+        // draw the source onto the output at an offset
+        g2d.drawImage(source, -startx, -starty, null);
+        // cleanup
+        g2d.dispose();
+        // send the output back
+        return new DesktopGraphic(output);
+    }
+
     @Override
     public File getExternalFile(String filename) {
         return new File(filename);

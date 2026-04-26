@@ -24,7 +24,7 @@ import java.util.List;
 public class OverworldState implements GameState {
 
     // define objects that will always be present no matter what
-    private final TiledMovement playergfx = new TiledMovement("/overworld/gfx/player_ow.png");
+    private final TiledMovement playergfx = new PlayerOverworldRenderer("/overworld/data/anim/player_ow.json","/overworld/gfx/player_ow.png");
     private TextSlicer slicer;
 
     // stuff for the loaded map goes here

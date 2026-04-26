@@ -1,0 +1,13 @@
+{
+	"base_folder": "/overworld/gfx/",
+	"anims": {
+		"1": {
+			"filename": "player_walkright.png",
+			"frames": 2
+		},
+        "2": {
+          "filename": "player_walkleft.png",
+          "frames": 2
+        }
+	}
+}

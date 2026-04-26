@@ -2,6 +2,7 @@ package com.alysoft.dankengine.renderObjects;
 
 import com.alysoft.dankengine.Main;
 import com.alysoft.dankengine.backends.base.GraphicsBackend;
+import com.alysoft.dankengine.enums.MovementDirections;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankGraphic;
 import com.alysoft.dankengine.utility.Camera;
@@ -28,6 +29,20 @@ public class TiledMovement implements DrawableObject {
     3 -> up
      */
     private int direction;
+    protected MovementDirections getDirection(){
+        switch (this.direction){
+            case 0:
+                return MovementDirections.RIGHT;
+            case 1:
+                return MovementDirections.LEFT;
+            case 2:
+                return MovementDirections.DOWN;
+            case 3:
+                return MovementDirections.UP;
+            default:
+                throw new RuntimeException("Invalid movement direction: " + Integer.toString(this.direction));
+        }
+    }
 
     public void ApplyMoveRight(){
         this.applyMovement(0);
@@ -65,6 +80,11 @@ public class TiledMovement implements DrawableObject {
         return this.TileYtoY() + this.subtiles_y;
     }
 
+    // only accessible by a subclass of this object
+    protected void setGraphic(DankGraphic gfx){
+        this.graphic = gfx;
+    }
+
     public TiledMovement(){
         this.useGraphics = false;
     }
@@ -75,12 +95,6 @@ public class TiledMovement implements DrawableObject {
         } catch (IOException e){
             // something has gone horribly wrong
             throw new RuntimeException(e);
-        }
-        // FIXME: recreate the graphic in an image editor later
-        //      for a POC, this will get the job done, however
-        if (this.graphic.getWidth() < Main.tile_size){
-            this.graphic = Main.getFunctionalBackend().upscaleGraphic(Main.tile_size, Main.tile_size, this.graphic);
-            System.out.println("WARNING: a tiled movement object upscaled a graphic!");
         }
         // if we survived, enable graphic mode
         this.useGraphics = true;
