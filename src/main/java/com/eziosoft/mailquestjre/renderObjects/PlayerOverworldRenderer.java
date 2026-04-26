@@ -36,8 +36,6 @@ public class PlayerOverworldRenderer extends TiledMovement {
         throw new RuntimeException("Invalid movement direction!");
     }
 
-    // FIXME: sometimes it looks like the animation does not play when moving
-    //      i don't know why, i don't think its a frame counter issue but i honestly have no idea
     @Override
     public void drawObject(GraphicsBackend gfx, Camera camera) {
         // get the direction the player is moving
@@ -54,7 +52,7 @@ public class PlayerOverworldRenderer extends TiledMovement {
                 int animation_id = this.convertDirectionToAnimID(dir);
                 // check the maximum frame count for the selected animation
                 if (this.anim_frame >= this.animations.get_numFrames(animation_id)) {
-                    this.anim_frame = 0;
+                    this.anim_frame = 1;
                 }
                 // update the animation of the movement object
                 super.setGraphic((DankGraphic) this.animations.getLoaded_anims().get(animation_id).get(this.anim_frame));

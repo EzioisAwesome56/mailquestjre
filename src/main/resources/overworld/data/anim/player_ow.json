@@ -3,11 +3,19 @@
 	"anims": {
 		"1": {
 			"filename": "player_walkright.png",
-			"frames": 2
+			"frames": 3
 		},
         "2": {
           "filename": "player_walkleft.png",
-          "frames": 2
+          "frames": 3
+        },
+        "3": {
+          "filename": "player_walkdown.png",
+          "frames": 3
+        },
+        "4": {
+          "filename": "player_walkup.png",
+          "frames": 3
         }
 	}
 }
