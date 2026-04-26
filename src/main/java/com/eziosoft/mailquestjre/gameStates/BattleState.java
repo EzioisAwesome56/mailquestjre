@@ -45,6 +45,8 @@ public class BattleState implements GameState {
     private boolean doLevelUp = false;
     private boolean doingLvlUp = false;
     private boolean queueLevelUp = false;
+    // is the battle slide in animation done?
+    private boolean battle_slidein_done = false;
     private boolean stat_wheel_spin = false;
     // new feature mostly meant for scripting
     private boolean set_flag_on_win = false;
@@ -95,6 +97,10 @@ public class BattleState implements GameState {
         this.damage_to_deal = 0;
         this.target = 0;
         this.queuetextupdate = false;
+        // stuff for the battle slide-in transition
+        this.battle_slidein_done = false;
+        // setup sprites for the slide in
+        this.player_sprite.setupForSlide(false);
         this.foeturn = false;
         this.playerdead = false;
         this.foedead = false;
@@ -137,6 +143,9 @@ public class BattleState implements GameState {
         this.foe = new SimpleEntity(ent);
         // load the foe's sprite
         this.foe_sprite = new BattleSprite("/battle/" + ent.getGraphic() + ".png", 300, 0);
+        // FIXME: this is called before reset state, so in order to avoid a crash, we need to put the slide
+        //      init code here instead
+        this.foe_sprite.setupForSlide(true);
     }
     // this will scale a foe's base states by whatever level you provided to the function in question.
     public void scaleFoeByLevel(int lvl){
@@ -229,6 +238,9 @@ public class BattleState implements GameState {
         if (this.doLevelUp){
             // level up code is handled elsewhere
             txt = this.doLevelUpState(renderlist, keys);
+        } else if (!this.battle_slidein_done){
+            // we need to perform the battle slide in
+            txt = this.doBattleSlideInTransition(renderlist, keys);
         } else if (this.showfulltextbox){
             // displaying the big textbox at the bottem; also responsible for exiting to overworld
             txt = this.showTextboxState(renderlist, keys);
@@ -308,6 +320,32 @@ public class BattleState implements GameState {
             // add 6 to the frame counter
             this.framecounter = 6;
         }
+    }
+
+    /**
+     * function responsible for making the battle slide in animation happen
+     * only runs if the battle slide in boolean is set to false
+     * @param renderlist the dankengine renderlist
+     * @param keys pressed keys
+     * @return a fake useless battletextbox
+     */
+    private BattleTextbox doBattleSlideInTransition(ArrayList<DrawableObject> renderlist, List keys){
+        // create a dummy battletextbox, we don't actually need one
+        BattleTextbox dummy = new BattleTextbox("dummy text");
+        dummy.forceEmpty();
+        // get both of the booleans from the objects
+        boolean foe_done = this.foe_sprite.slide_done();
+        boolean player_done = this.player_sprite.slide_done();
+        if (!(foe_done && player_done)){
+            // slide both of the sprites over
+            if (!foe_done) this.foe_sprite.doSlideFrame(true);
+            if (!player_done) this.player_sprite.doSlideFrame(false);
+        } else {
+            // tell the battle engine that the slide in has finished
+            this.battle_slidein_done = true;
+        }
+        // this function wants a textbox returned, so return our dummy textbox
+        return dummy;
     }
 
     /*
@@ -435,8 +473,8 @@ public class BattleState implements GameState {
                         // can we even flee in the first place?
                         if (this.can_flee) {
                             // generate a random number
-                            int num = MailQuestJRE.random.nextInt(17);
-                            if (num <= 5) {
+                            int num = MailQuestJRE.random.nextInt(4);
+                            if (num <= 2) {
                                 this.battleover = true;
                                 this.exit_to_overworld = true;
                                 this.flee_state = 2;
