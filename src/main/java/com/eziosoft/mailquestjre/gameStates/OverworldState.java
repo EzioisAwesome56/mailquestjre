@@ -257,7 +257,6 @@ public class OverworldState implements GameState {
             if (this.map_height == -1) this.map_height = 20;
             if (this.map_width == -1) this.map_width = 20;
         }
-
         // we will now attempt to load the tileset for this map now
         MapTileSet tileset;
         try {
@@ -432,6 +431,7 @@ public class OverworldState implements GameState {
                         ((ItemMenuState) Main.getState(GameStates.ITEMS.id)).setReturnState(GameStates.OVERWORLD);
                         break;
                     case 2: // TODO: MAP
+                        break;
                     case 3: // save button
                         // enable the save flag
                         this.doing_save = true;
