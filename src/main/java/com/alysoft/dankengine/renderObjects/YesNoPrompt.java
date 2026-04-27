@@ -1,7 +1,6 @@
-package com.eziosoft.mailquestjre.renderObjects;
+package com.alysoft.dankengine.renderObjects;
 
 import com.alysoft.dankengine.backends.base.GraphicsBackend;
-import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderer.DankColor;
 import com.alysoft.dankengine.renderer.DankFont;
 import com.alysoft.dankengine.utility.Camera;

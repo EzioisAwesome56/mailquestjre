@@ -7,6 +7,7 @@ import com.alysoft.dankengine.gameStates.GameState;
 import com.alysoft.dankengine.renderObjects.DrawableObject;
 import com.alysoft.dankengine.renderObjects.TextboxObject;
 import com.alysoft.dankengine.renderObjects.TiledMovement;
+import com.alysoft.dankengine.renderObjects.YesNoPrompt;
 import com.alysoft.dankengine.renderer.DankGraphic;
 import com.alysoft.dankengine.utility.*;
 import com.eziosoft.mailquestjre.MailQuestJRE;
