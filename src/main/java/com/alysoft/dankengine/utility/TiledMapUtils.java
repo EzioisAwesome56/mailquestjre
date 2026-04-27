@@ -15,7 +15,7 @@ public class TiledMapUtils {
 
     // decided to break this code out into its own class, just for
     // decluttering the main overworld state class
-    public static int[][] loadTileMap(String filename) throws Exception {
+    public static int[][] loadTileMap(String filename, int width, int height) throws Exception {
         // first, we need to try to open the file as a stream
         InputStream stream = Main.getFunctionalBackend().getEngineResource("/overworld/data/maps/" + filename + ".tmx");
         // ok, now we have to attempt to parse the XML
@@ -51,13 +51,13 @@ public class TiledMapUtils {
         // now we can deal with the CSV data. Cringe
         Iterable<CSVRecord> csvdata = CSVFormat.DEFAULT.parse(new StringReader(garbage));
         // anyway, now we setup the 2d array we need
-        int[][] output = new int[20][20];
+        int[][] output = new int[height][width];
         int x = 0;
         int y = 0;
         for (CSVRecord record : csvdata){
             for (String content : record.toList()){
                 // check if we're at the end of a row yet
-                if (x < 20){
+                if (x < width){
                     // no? then just put the data in
                     /*
                     HOTFIX: there is disagreement between actual tileset savedata

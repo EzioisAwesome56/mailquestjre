@@ -1,5 +1,7 @@
 package com.eziosoft.mailquestjre.json;
 
+import com.alysoft.dankengine.Main;
+
 import java.util.List;
 
 public class OverworldMap {
@@ -19,6 +21,8 @@ public class OverworldMap {
     - encounter mode: 0 -> none, 1 -> only in grass, 2  -> everywhere
     - encounter table
     - wild encounter rng base number
+    - map width in tiles
+    - map height in tiles
     - todo: flesh out the rest of this list
      */
     private String tilemap;
@@ -38,6 +42,8 @@ public class OverworldMap {
     private int encountermode;
     private List<EncounterTableEntry> encounters;
     private int wildchance;
+    private int width = -1;
+    private int height = -1;
 
 
     // getters for all of these
@@ -80,6 +86,12 @@ public class OverworldMap {
     }
     public List<MapEvent> getEvents() {
         return this.events;
+    }
+    public int getHeight() {
+        return this.height;
+    }
+    public int getWidth() {
+        return this.width;
     }
 
     public int getHeal_spawn() {

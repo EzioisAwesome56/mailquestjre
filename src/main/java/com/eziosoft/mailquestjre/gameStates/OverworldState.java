@@ -243,9 +243,21 @@ public class OverworldState implements GameState {
         }
         // ok, we have the map now, set it into place
         this.current_map = map;
-        // FIXME: don't hardcode map sizes, put them in the map's json file. this will allow for larger maps in the future
-        this.map_width = 20;
-        this.map_height = 20;
+        // get the map width and height from the map's data file
+        this.map_width = map.getWidth();
+        this.map_height = map.getHeight();
+        /**
+         * @deprecated you should really put the map width and height in the json
+         * instead of relying on this legacy thing to support old map files
+         */
+        if (this.map_width == -1 || this.map_height == -1){
+            Main.getFunctionalBackend().logError("WARNING: this map does not contain width/height information!\n" +
+                    "sane defaults will be used assuming legacy map, but you should define the size in your json!\n" +
+                    "this will probably be removed at some point in the future!");
+            if (this.map_height == -1) this.map_height = 20;
+            if (this.map_width == -1) this.map_width = 20;
+        }
+
         // we will now attempt to load the tileset for this map now
         MapTileSet tileset;
         try {
@@ -260,7 +272,7 @@ public class OverworldState implements GameState {
         this.tileset = tileset;
         // the final thing we need is the actual map data, which we will read from TMX
         try {
-            this.tile_map = TiledMapUtils.loadTileMap(this.current_map.getTilemap());
+            this.tile_map = TiledMapUtils.loadTileMap(this.current_map.getTilemap(), this.map_width, this.map_height);
         } catch (Exception e){
             // something broke, just throw a runtime exception
             throw new IllegalStateException("Error while trying to load block data for map " + this.map_filename, e);
