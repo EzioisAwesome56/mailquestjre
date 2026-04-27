@@ -143,8 +143,8 @@ public class BattleState implements GameState {
         this.foe = new SimpleEntity(ent);
         // load the foe's sprite
         this.foe_sprite = new BattleSprite("/battle/" + ent.getGraphic() + ".png", 300, 0);
-        // FIXME: this is called before reset state, so in order to avoid a crash, we need to put the slide
-        //      init code here instead
+        // foes are not loaded before the battle's resetstate function is called
+        // so this has to go here instead of in that function
         this.foe_sprite.setupForSlide(true);
     }
     // this will scale a foe's base states by whatever level you provided to the function in question.
