@@ -174,6 +174,10 @@ public class OverworldState implements GameState {
         // make the camera move to the player's current position
         this.camera.followPointX(this.playergfx.getX() + (Main.tile_size / 2), 0, this.map_width * Main.tile_size);
         this.camera.followPointY(this.playergfx.getY() + (Main.tile_size / 2), 0, this.map_height * Main.tile_size);
+        // are we trying to save the game
+        if (this.doing_save){
+            this.promptToSaveGame(renderlist, keys, mouse);
+        }
         // is the menu open?
         if (this.isPauseMenu){
             // run the routine to handle that
@@ -308,6 +312,74 @@ public class OverworldState implements GameState {
         this.selected_spawn = -2;
     }
 
+    private boolean save_text_init = false;
+    private boolean showing_save_yesno = false;
+    private boolean doing_save = false;
+    private boolean save_text_done = false;
+    private void promptToSaveGame(ArrayList<DrawableObject> renderlist, ArrayList<Integer> keys, MousePos mouse){
+        // init the text slicer again with some text
+        if (!this.save_text_init){
+            this.slicer = new TextSlicer("Would you like to save the game?");
+            this.save_text_init = true;
+        }
+        // create a new textbox
+        TextboxObject textbox = new TextboxObject(this.slicer.getText());
+        renderlist.add(textbox);
+        // are we done slicing?
+        if (this.slicer.doneSlicing() && !this.save_text_done){
+            // the text is done being shown, set the flag
+            this.save_text_done = true;
+            // flip the flag to show the yesno prompt
+            this.showing_save_yesno = true;
+            // reset frame counter
+            this.frame_counter = 2;
+            // move selected item to no (1)
+            this.menu_item_selected = 1;
+        }
+        // we need to deal with the prompt for showing yes/no
+        if (this.showing_save_yesno){
+            // check if we have no frames in the counter
+            if (this.frame_counter == 0){
+                // PROCESS INPUTS HERE
+                if (keys.contains(DankButtons.INPUT_DOWN)){
+                    // subtract 1 from the menu input
+                    this.menu_item_selected++;
+                } else if (keys.contains(DankButtons.INPUT_UP)){
+                    // add 1
+                    this.menu_item_selected--;
+                } else if (keys.contains(DankButtons.INPUT_ACTION)){
+                    // unset the showing save yes no flag
+                    this.showing_save_yesno = false;
+                    if (this.menu_item_selected == 0){
+                        // the save option is selected, save the game
+                        // save the game
+                        SaveFileUtils.CreateandWriteSaveFile(this.map_filename, this.playergfx.getTilex(), this.playergfx.getTiley());
+                    }
+                    // unset a bunch of other crap
+                    this.doing_save = false;
+                    this.isPauseMenu = true;
+                    this.save_text_done = false;
+                    this.save_text_init = false;
+                }
+                // bounds checking for the input
+                if (this.menu_item_selected < 0){
+                    this.menu_item_selected = 0;
+                }
+                if (this.menu_item_selected > 1){
+                    this.menu_item_selected = 1;
+                }
+                // put some frames on the frame counter
+                this.frame_counter = menu_movement_delay;
+            } else {
+                this.frame_counter--;
+            }
+            // display the yes/no prompt
+            YesNoPrompt prompt = new YesNoPrompt(this.menu_item_selected);
+            renderlist.add(prompt);
+        }
+
+    }
+
     // this handles the player opening the pause menu
     // who wouldve guessed?
     private void doPauseMenu(ArrayList<DrawableObject> renderlist, ArrayList<Integer> keys, MousePos mouse){
@@ -349,10 +421,10 @@ public class OverworldState implements GameState {
                         break;
                     case 2: // TODO: MAP
                     case 3: // save button
-                        // TODO: we should probably prompt to see if the user actually wants to save
-                        //      but that is scope creep to deal with later
-                        // call the function to save the game
-                        SaveFileUtils.CreateandWriteSaveFile(this.map_filename, this.playergfx.getTilex(), this.playergfx.getTiley());
+                        // enable the save flag
+                        this.doing_save = true;
+                        // it will conflict with the pause menu, so disable the pause menu for now
+                        this.isPauseMenu = false;
                         break;
                     case 4: // TODO: quit
                 }
